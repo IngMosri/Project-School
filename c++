@@ -11,11 +11,13 @@ void MostarInventario();
 void AdministradorDeCuentas();
 void Regresar();
 void Salir();
-
+int total = 0;   //variables globales
+string nombre[100];
 int main()
 {
-    int opcion = 0;
-    do
+int opcion = 0;
+
+        do
     {
         cout<< "menu\n";
         cout<< "1 Administrador\n";
@@ -75,19 +77,39 @@ void Administrador()
     }while(opcion != 8);
 }
 
-void Alta(/* arguments */) {
-  /* code */
-}
+void Alta(/* arguments */)
+{
+  string name;
+      int i= total;
+      while (true)
+      {
+
+          cout << "Ingrese el Producto deseado: ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "Bienvenido " << name << endl;
+          i++;
+      }
+      total =i;
+  }
+
 
 void Baja(/* arguments */) {
   /* code */
 }
-void Consultas(/* arguments */) {
-  /* code */
+void Consultas(/* arguments */)
+{
+
 }
-void MostarInventario(/* arguments */) {
-  /* code */
+void MostarInventario(/* arguments */)
+{
+          int j;
+          for (j = 0; j < total; j++)
+          cout << nombre[j]<<"\n";
 }
+
 void AdministradorDeCuentas(/* arguments */) {
   /* code */
 }
