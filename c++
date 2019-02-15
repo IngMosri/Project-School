@@ -1,23 +1,34 @@
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
 void Administrador();
 void Ventas(); /*prototipos*/
-void Alta();
-void Baja();
+void Altas();
+void Bajas();
 void Consultas();
 void MostarInventario();
-void AdministradorDeCuentas();
-void Regresar();
-void Salir();
-int total = 0;   //variables globales
+void AdministradorDeCuentasDeUsuario();
+void Modificaciones();
+void CorteDecajaGeneral();
+void RegresarAlMenuAnterior();
+int total = 0;   //variable globales
+int articulo[100]; //variable globales
 string nombre[100];
+int buscar(string name);
+int id[100] ={2,4,1,3,5};
+string producto[100]={"aceite","agua","arroz","huevo","leche","pan","refresco"};
+float pc[100]={10,10,10,10,10};
+float pv[100]={10,20,10,15,11};
+int existencia[100]={23,20,12,20,10};
+int nr[100]={5,2,7,5,3};
+int st[100]={1,1,1,1,1};
 int main()
 {
 int opcion = 0;
 
-        do
+
     {
         cout<< "menu\n";
         cout<< "1 Administrador\n";
@@ -41,10 +52,10 @@ int opcion = 0;
 void Ventas(/* arguments */) {
   /* code */
 }
-
+/* Menu de administradir */
 void Administrador()
 {
-    int opcion = 0;
+    int opcion = 0; //variable local
     do
     {
         cout<< "Estas en el modulo Administrador\n";
@@ -58,29 +69,31 @@ void Administrador()
         cin >> opcion;
         switch (opcion)
         {
-                case 1: Alta();
+                case 1: Altas();
                     break;
-                case 2: Baja();
+                case 2: Bajas();
                     break;
                 case 3: Consultas();
                     break;
-                case 4: MostarInventario();
+                case 4: Modificaciones();
                         break;
-                case 5: AdministradorDeCuentas();
+                case 5: MostarInventario();
                         break;
-                case 6: Regresar();
+                case 6: AdministradorDeCuentasDeUsuario();
                         break;
-                case 8: Salir();
+                case 7: CorteDecajaGeneral():
+                         break;
+                case 8: RegresarAlMenuAnterior();
                         break;
                 default : cout << "opcion invalida";
         }
     }while(opcion != 8);
 }
-
-void Alta(/* arguments */)
+/*Menu de alta de productos*/
+void Altas(/* arguments */)
 {
   string name;
-      int i= total;
+      int i= total; //variable local
       while (true)
       {
 
@@ -96,26 +109,64 @@ void Alta(/* arguments */)
   }
 
 
-void Baja(/* arguments */) {
+void Bajas(/* arguments */) {
   /* code */
 }
 void Consultas(/* arguments */)
 {
+  int pos; //variable local
+      string name;
+      while (true) {
+          int i = 0;
+          cout << "Producto";
+          cin>>name;
+          if (name=="*")
+              break;
+          pos=buscar(name);
+          if (pos==-1)
+              cout << "No existe" << endl;
+          else
+              cout<<"Producto: "<<articulo[pos];
 
+       }
 }
+  int buscar(string name) {
+  int i = 0;
+      while (i < total && nombre[i] != name)
+                i++;
+       if(i==total)
+  return -1;
+      else
+return i;
+}
+
+/* Menu de Modificaciones de cuentas y productos. */
+void Modificaciones(/* arguments */) {
+  /* code */
+}
+
+/* Menu de constual de inventario */
 void MostarInventario(/* arguments */)
 {
-          int j;
-          for (j = 0; j < total; j++)
-          cout << nombre[j]<<"\n";
+       {
+     int j;
+      for (j = 0; j < total; j++)
+        cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
+    for (j = 0; j < total; j++)
+      if (st[j]==1)
+        cout<<setw(10)<<id[j]<<setw(20)<< producto[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
+
+       }
+
 }
 
-void AdministradorDeCuentas(/* arguments */) {
+void AdministradorDeCuentasDeUsuario(/* arguments */) {
   /* code */
 }
-void Regresar(/* arguments */) {
+/* Menu de corte de caja general*/
+void CorteDecajaGeneral(/* arguments */) {
   /* code */
 }
-void Salir(/* arguments */) {
+void RegresarAlMenuAnterior(/* arguments */) {
   /* code */
 }
