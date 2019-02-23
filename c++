@@ -91,7 +91,6 @@ void Administrador()
         }
     }while(opcion != 8);
 }
-/*Menu de alta de productos*/
 void Altas(/* arguments */)
 {
   string name;
@@ -99,17 +98,65 @@ void Altas(/* arguments */)
       while (true)
       {
 
-          cout << "Ingrese el Producto deseado: ";
+          cout << "Ingrese el ID  Producto : ";
           cin>>name;
           if (name == "*")
               break;
           nombre[i] = name;
-          cout << "Bienvenido " << name << endl;
+          cout << "ID agregado " << name << endl;
           i++;
+
+          cout << "Ingrese el Producto : ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "Producto agregado " << name << endl;
+          i++;
+
+          cout << "Ingrese el PC: ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "PC ingresado " << name << endl;
+          i++;
+
+          cout << "Ingrese el PV : ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "Pv ingresado " << name << endl;
+          i++;
+
+          cout << "Ingrese las Existencias : ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "Existencias ingresadas " << name << endl;
+          i++;
+
+          cout << "Ingrese el NR : ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "NR ingresado " << name << endl;
+          i++;
+
+          cout << "Ingrese el ST : ";
+          cin>>name;
+          if (name == "*")
+              break;
+          nombre[i] = name;
+          cout << "ST ingresado " << name << endl;
+          i++;
+
       }
       total =i;
   }
-
 
 void Bajas(/* arguments */) {
   /* code */
