@@ -18,12 +18,12 @@ int total = 5;   //variable globales
 int articulo[100]; //variable globales
 string nombre[100];
 int buscar(string BuscarProducto);
-int id[100] ={2,4,1,3,5};
-string producto[100]={"aceite","agua","arroz","huevo","leche","pan","refresco"};
+string id[100] ={"2","4","1","3","5"};
+string producto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
 float pc[100]={10,10,10,10,10};
 float pv[100]={10,20,10,15,11};
 int existencia[100]={23,20,12,20,10};
-int nr[100]={5,2,7,5,3};
+int nr[100]={5,2,8,5,3};
 int st[100]={1,1,1,1,1};
 int main()
 {
@@ -99,59 +99,35 @@ void Altas(/* arguments */)
       {
 
           cout << "Ingrese el ID  Producto : ";
-          cin>>name;
-          if (name == "*")
+          cin>> id[i];
+          if (id[i] == "*")
               break;
-          nombre[i] = name;
-          cout << "ID agregado " << name << endl;
-          i++;
+                    cout << "ID agregado " << id[i] << endl;
 
           cout << "Ingrese el Producto : ";
-          cin>>name;
-          if (name == "*")
-              break;
-          nombre[i] = name;
-          cout << "Producto agregado " << name << endl;
-          i++;
+          cin>>producto[i];
+                    cout << "Producto agregado " << producto[i]<< endl;
 
           cout << "Ingrese el PC: ";
-          cin>>name;
-          if (name == "*")
-              break;
-          nombre[i] = name;
-          cout << "PC ingresado " << name << endl;
-          i++;
+          cin>>pc[i];
+                    cout << "PC ingresado " << pc[i] << endl;
 
           cout << "Ingrese el PV : ";
-          cin>>name;
-          if (name == "*")
-              break;
-          nombre[i] = name;
-          cout << "Pv ingresado " << name << endl;
-          i++;
+          cin>>pv[i];
+                    cout << "Pv ingresado " << pv[i] << endl;
 
           cout << "Ingrese las Existencias : ";
-          cin>>name;
-          if (name == "*")
-              break;
-          nombre[i] = name;
-          cout << "Existencias ingresadas " << name << endl;
-          i++;
+          cin>>existencia[i];
+
+          cout << "Existencias ingresadas " << existencia[i] << endl;
 
           cout << "Ingrese el NR : ";
-          cin>>name;
-          if (name == "*")
-              break;
-          nombre[i] = name;
-          cout << "NR ingresado " << name << endl;
-          i++;
+          cin>>nr[i];
+                  cout << "NR ingresado " << nr[1] << endl;
 
           cout << "Ingrese el ST : ";
-          cin>>name;
-          if (name == "*")
-              break;
-          nombre[i] = name;
-          cout << "ST ingresado " << name << endl;
+          cin>>st[i];
+          cout << "ST ingresado " << st[i] << endl;
           i++;
 
       }
