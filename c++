@@ -1,9 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-
 using namespace std;
-
 void Administrador();
 void Ventas(); /*prototipos*/
 void Altas();
@@ -198,18 +196,34 @@ void Modificaciones(/* arguments */) {
 }
 
 /* Menu de constual de inventario */
-void MostarInventario(/* arguments */)
+void MostarInventario( )
 {
-       {
+         int opcion = 0; //variable local
+
+
+         {
+           std::cout << "Presione 1 si desea ver el menu por ID" << '\n';
+         std::cout << "/Presione 2 si desea ver el menu por producto" << '\n';
+         std::cin >> opcion;
+        switch (opcion){
+        case 1:
+         int h;
+         cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
+         for (h = 0; h < total; h++)
+          if (st[h]==1)
+            cout<<setw(10)<<id[h]<<setw(20)<< producto[h] <<setw(10)<<pc[h]<<setw(10)<<pv[h]<<setw(12)<<existencia[h]<<setw(10)<<nr[h]<<setw(10)<<st[h]<<endl;
+             break;
+        case 2:
      int j;
-     cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
+     cout<<setw(10)<<"Producto"<<setw(20)<<"ID"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
     for (j = 0; j < total; j++)
       if (st[j]==1)
-        cout<<setw(10)<<id[j]<<setw(20)<< producto[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
-
+        cout<<setw(10)<<producto[j]<<setw(20)<<id[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
+         break;
        }
-}
+     }
 
+}
 void AdministradorDeCuentasDeUsuario(/* arguments */) {
   /* code */
 }
