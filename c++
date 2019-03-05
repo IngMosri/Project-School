@@ -1,6 +1,6 @@
-
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
@@ -15,8 +15,6 @@ void Modificaciones();
 void CorteDecajaGeneral();
 void RegresarAlMenuAnterior();
 int total = 5;   //variable globales
-int articulo[100]; //variable globales
-string nombre[100];
 int buscar(string BuscarProducto);
 string id[100] ={"2","4","1","3","5"};
 string producto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
@@ -56,6 +54,36 @@ void Ventas(/* arguments */) {
 /* Menu de administradir */
 void Administrador()
 {
+  {
+    int password;
+       password = 1234;
+
+  string username;
+  username = "admin";
+  string userinput;
+
+  do
+{
+        cout << "Enter username:";
+  	    cin >> userinput;
+
+     if (userinput == username);
+   {
+  	     cout <<"\n";
+    	   cout << "Enter password:";
+  	     cin >> password;
+
+    }
+}
+    	while (userinput == username);
+
+       if (password == 1234)
+          cout << "Accesso concedido ...";
+          if (password != 1234)
+              cout << "Acceso Incorrecto.....Invalid Username/Password:";
+
+    }
+
     int opcion = 0; //variable local
     do
     {
@@ -151,20 +179,19 @@ void Consultas(/* arguments */)
           if (pos==-1)
               cout << "No existe" << endl;
           else
-              cout<<"Producto: "<<articulo[pos];
+              cout<<"Precio de compra: "<<pc[pos];
 
        }
 }
   int buscar(string BuscarProducto) {
   int i = 0;
-      while (i < total && nombre[i] != BuscarProducto)
+      while (i < total && producto[i] != BuscarProducto)
                 i++;
        if(i==total)
-  return -1;
-      else
-return i;
+          return -1;
+       else
+          return i;
 }
-
 /* Menu de Modificaciones de cuentas y productos. */
 void Modificaciones(/* arguments */) {
   /* code */
