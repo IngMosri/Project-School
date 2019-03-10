@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 using namespace std;
+
 void Administrador();
 void Ventas(); /*prototipos*/
 void Altas();
@@ -14,7 +15,7 @@ void CorteDecajaGeneral();
 void RegresarAlMenuAnterior();
 int total = 5;   //variable globales
 int buscar(string BuscarProducto);
-string id[100] ={"2","4","1","3","5"};
+int id[100] ={2,4,1,3,5};
 string producto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
 float pc[100]={10,10,10,10,10};
 float pv[100]={10,20,10,15,11};
@@ -119,46 +120,34 @@ void Administrador()
 }
 void Altas(/* arguments */)
 {
-  string name;
-      int i= total; //variable local
-      while (true)
-      {
-
-          cout << "Ingrese el ID  Producto : ";
-          cin>> id[i];
-          if (id[i] == "*")
-              break;
-                    cout << "ID agregado " << id[i] << endl;
-
-          cout << "Ingrese el Producto : ";
-          cin>>producto[i];
-                    cout << "Producto agregado " << producto[i]<< endl;
-
-          cout << "Ingrese el PC: ";
-          cin>>pc[i];
-                    cout << "PC ingresado " << pc[i] << endl;
-
-          cout << "Ingrese el PV : ";
-          cin>>pv[i];
-                    cout << "Pv ingresado " << pv[i] << endl;
-
-          cout << "Ingrese las Existencias : ";
-          cin>>existencia[i];
-
-          cout << "Existencias ingresadas " << existencia[i] << endl;
-
-          cout << "Ingrese el NR : ";
-          cin>>nr[i];
-                  cout << "NR ingresado " << nr[1] << endl;
-
-          cout << "Ingrese el ST : ";
-          cin>>st[i];
-          cout << "ST ingresado " << st[i] << endl;
-          i++;
-
-      }
-      total =i;
+  string temp_prod;
+  int temp_pc,temp_pv,temp_exi,temp_nr;
+  std::cout << "Ingrese Producto" << '\n';
+  cin>>temp_prod;
+  if(buscar(temp_prod)== -1){
+    producto[total] =temp_prod;
+    do{
+      std::cout << "ingrese PC" << '\n';
+      cin>>temp_pc;
+      std::cout << "Ingrese PV" << '\n';
+      cin>>temp_pv;
+    }while (temp_pc>temp_pv);
+    pc[total] = temp_pc;
+    pv[total] = temp_pv;
+   }
+   else
+          std::cout << "Producto duplicado " << '\n';
+        do {
+std::cout << "Ingrese existencia" << '\n';
+cin>>temp_exi;
+std::cout << "ingrese NR" << '\n';
+cin>>temp_nr;
+}while(temp_exi<temp_nr);
+existencia[total] = temp_exi;
+nr[total] = temp_nr;
+id[total]= total++;
   }
+
 
 void Bajas(/* arguments */) {
   /* code */
@@ -181,6 +170,7 @@ void Consultas(/* arguments */)
 
        }
 }
+
   int buscar(string BuscarProducto) {
   int i = 0;
       while (i < total && producto[i] != BuscarProducto)
@@ -198,34 +188,16 @@ void Modificaciones(/* arguments */) {
 /* Menu de constual de inventario */
 void MostarInventario( )
 {
-         int opcion = 0; //variable local
-
-
-         {
-           std::cout << "Presione 1 si desea ver el menu por ID" << '\n';
-         std::cout << "/Presione 2 si desea ver el menu por producto" << '\n';
-         std::cin >> opcion;
-        switch (opcion){
-        case 1:
-         int h;
-         cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
-         for (h = 0; h < total; h++)
-          if (st[h]==1)
-            cout<<setw(10)<<id[h]<<setw(20)<< producto[h] <<setw(10)<<pc[h]<<setw(10)<<pv[h]<<setw(12)<<existencia[h]<<setw(10)<<nr[h]<<setw(10)<<st[h]<<endl;
-             break;
-        case 2:
+       {
      int j;
-     cout<<setw(10)<<"Producto"<<setw(20)<<"ID"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
+     cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
     for (j = 0; j < total; j++)
-      if (st[j]==1)
-        cout<<setw(10)<<producto[j]<<setw(20)<<id[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
-         break;
-       }
-     }
+        cout<<setw(10)<<id[j]<<setw(20)<< producto[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
 
+       }
 }
 void AdministradorDeCuentasDeUsuario(/* arguments */) {
-  /* code */
+
 }
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
