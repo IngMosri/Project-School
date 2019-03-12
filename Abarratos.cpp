@@ -13,6 +13,7 @@ void AdministradorDeCuentasDeUsuario();
 void Modificaciones();
 void CorteDecajaGeneral();
 void RegresarAlMenuAnterior();
+void MostrarCuentasDeUsuarios();
 int total = 5;   //variable globales
 int buscar(string BuscarProducto);
 int id[100] ={2,4,1,3,5};
@@ -22,11 +23,10 @@ float pv[100]={10,20,10,15,11};
 int existencia[100]={23,20,12,20,10};
 int nr[100]={5,2,8,5,3};
 int st[100]={1,1,1,1,1};
+int AltaUsuario = 0;
 int main()
 {
 int opcion = 0;
-
-
     {
         cout<< "menu\n";
         cout<< "1 Administrador\n";
@@ -71,7 +71,6 @@ void Administrador()
   	     cout <<"\n";
     	   cout << "Enter password:";
   	     cin >> password;
-
     }
 }
     	while (userinput == username);
@@ -80,7 +79,6 @@ void Administrador()
           cout << "Accesso concedido ...";
           if (password != 1234)
               cout << "Acceso Incorrecto.....Invalid Username/Password:";
-
     }
 
     int opcion = 0; //variable local
@@ -118,6 +116,7 @@ void Administrador()
         }
     }while(opcion != 8);
 }
+
 void Altas(/* arguments */)
 {
   string temp_prod;
@@ -132,12 +131,10 @@ void Altas(/* arguments */)
       std::cout << "Ingrese PV" << '\n';
       cin>>temp_pv;
     }while (temp_pc>temp_pv);
+    st[total] = 1;
     pc[total] = temp_pc;
     pv[total] = temp_pv;
-   }
-   else
-          std::cout << "Producto duplicado " << '\n';
-        do {
+    do {
 std::cout << "Ingrese existencia" << '\n';
 cin>>temp_exi;
 std::cout << "ingrese NR" << '\n';
@@ -145,13 +142,18 @@ cin>>temp_nr;
 }while(temp_exi<temp_nr);
 existencia[total] = temp_exi;
 nr[total] = temp_nr;
-id[total]= total++;
+//std::cout << "total" <<total <<'\n';
+id[total] = total+1;
+total++;
+       }
+   else
+          std::cout << "Producto duplicado " << '\n';
   }
-
 
 void Bajas(/* arguments */) {
   /* code */
 }
+
 void Consultas(/* arguments */)
 {
   int pos; //variable local
@@ -167,7 +169,6 @@ void Consultas(/* arguments */)
               cout << "No existe" << endl;
           else
               cout<<"Precio de compra: "<<pc[pos];
-
        }
 }
 
@@ -180,6 +181,7 @@ void Consultas(/* arguments */)
        else
           return i;
 }
+
 /* Menu de Modificaciones de cuentas y productos. */
 void Modificaciones(/* arguments */) {
   /* code */
@@ -188,17 +190,62 @@ void Modificaciones(/* arguments */) {
 /* Menu de constual de inventario */
 void MostarInventario( )
 {
-       {
+         int opcion = 0; //variable local
+
+
+         {
+           std::cout << "Presione 1 si desea ver el menu por ID" << '\n';
+         std::cout << "/Presione 2 si desea ver el menu por producto" << '\n';
+         std::cin >> opcion;
+        switch (opcion){
+        case 1:
+         int h;
+         cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
+         for (h = 0; h < total; h++)
+            cout<<setw(10)<<id[h]<<setw(20)<< producto[h] <<setw(10)<<pc[h]<<setw(10)<<pv[h]<<setw(12)<<existencia[h]<<setw(10)<<nr[h]<<setw(10)<<st[h]<<endl;
+             break;
+        case 2:
      int j;
-     cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
+     cout<<setw(10)<<"Producto"<<setw(20)<<"ID"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
     for (j = 0; j < total; j++)
-        cout<<setw(10)<<id[j]<<setw(20)<< producto[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
-
+        cout<<setw(10)<<producto[j]<<setw(20)<<id[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
+         break;
        }
-}
-void AdministradorDeCuentasDeUsuario(/* arguments */) {
+     }
 
 }
+
+void AdministradorDeCuentasDeUsuario(/* arguments */) {
+  int opcion = 0; //variable local
+  do
+  {
+      cout<< "Estas en el modulo Administrador de cuentas de usuario \n";
+      cout<< "1 Alta\n";
+      cout << "2  Baja" << '\n';
+      cout << "3  Consultas" << '\n';
+      cout << "4  Modificaciones"<< '\n';
+      cout << "5  Mostrar cuenta de usuario " << '\n';
+      cout << "6  Regresar al menu principal" << '\n';
+      cin >> opcion;
+      switch (opcion)
+      {
+              case 1: Altas();
+                  break;
+              case 2: Bajas();
+                  break;
+              case 3: Consultas();
+                  break;
+              case 4: Modificaciones();
+                      break;
+              case 5: AdministradorDeCuentasDeUsuario();
+                      break;
+              case 6: RegresarAlMenuAnterior();
+                      break;
+              default : cout << "opcion invalida";
+      }
+  }while(opcion != 6);
+}
+
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
   /* code */
