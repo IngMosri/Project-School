@@ -27,8 +27,8 @@ float pv[100]={10,20,10,15,11};
 int existencia[100]={23,20,12,20,10};
 int nr[100]={5,2,8,5,3};
 int st[100]={1,1,1,1,1};
-int  usuario[100];
-int contrasena[100];
+string usuario[100];
+string contrasena[100];
 int main()
 {
 int opcion = 0;
@@ -167,10 +167,10 @@ void Bajas(/* arguments */) {
   while(true){
         std::cout << "Producto" << '\n';
         std::cin >> producto;
-        if(BuscarProducto=="*")
+        if(producto=="*")
                           break;
-        int buscar(producto);
-        pos=buscar(BuscarProducto);
+        int buscar(string BuscarProducto);
+        pos=buscar(producto);
         std::cout << "productos" << '\n';
         if(pos==-1)
                  std::cout << "no existe" << '\n';
@@ -275,18 +275,27 @@ void AdministradorDeCuentasDeUsuario(/* arguments */) {
 
   }
 void AltaUsuario(/* arguments */) {
-  {
-    string name;
+     {
+    string usuario,contrasena;
         int i= total; //variable local
-            cout << "Ingrese el nuevo suario : ";
-            cin>> usuario[i];
-            cout << "Usuario agregado " << usuario[i] << endl;
-            cout << "Ingrese la contrasena  : ";
-            cin>>contrasena[i];
-            cout << "contrasena agregada " << contrasena[i]<< endl;
+        while (true)
+        {
+
+            cout << "Ingrese nombre del nuevo usuario : ";
+            cin>>usuario;
+            if (usuario == "*")
+                break;
+            cout << "Ingrese contrasena";
+            std::cin >> contrasena;
+
+            i++;
+        }
+        total =i;
+    }
 
 
- }
+
+
 }
 void BajaUsuario(/* arguments */) {
   /* code */
