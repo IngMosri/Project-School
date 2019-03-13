@@ -14,6 +14,10 @@ void Modificaciones();
 void CorteDecajaGeneral();
 void RegresarAlMenuAnterior();
 void MostrarCuentasDeUsuarios();
+void AltaUsuario();
+void BajaUsuario();
+void ModicacionDeUsuario();
+void ConsultaDeUsario();
 int total = 5;   //variable globales
 int buscar(string BuscarProducto);
 int id[100] ={2,4,1,3,5};
@@ -23,10 +27,13 @@ float pv[100]={10,20,10,15,11};
 int existencia[100]={23,20,12,20,10};
 int nr[100]={5,2,8,5,3};
 int st[100]={1,1,1,1,1};
-int AltaUsuario = 0;
+int  usuario[100];
+int contrasena[100];
 int main()
 {
 int opcion = 0;
+
+
     {
         cout<< "menu\n";
         cout<< "1 Administrador\n";
@@ -71,6 +78,7 @@ void Administrador()
   	     cout <<"\n";
     	   cout << "Enter password:";
   	     cin >> password;
+
     }
 }
     	while (userinput == username);
@@ -79,6 +87,7 @@ void Administrador()
           cout << "Accesso concedido ...";
           if (password != 1234)
               cout << "Acceso Incorrecto.....Invalid Username/Password:";
+
     }
 
     int opcion = 0; //variable local
@@ -148,12 +157,32 @@ total++;
        }
    else
           std::cout << "Producto duplicado " << '\n';
+
   }
 
 void Bajas(/* arguments */) {
-  /* code */
+  string producto;
+  string BuscarProducto;
+  int i,pos;
+  while(true){
+        std::cout << "Producto" << '\n';
+        std::cin >> producto;
+        if(BuscarProducto=="*")
+                          break;
+        int buscar(producto);
+        pos=buscar(BuscarProducto);
+        std::cout << "productos" << '\n';
+        if(pos==-1)
+                 std::cout << "no existe" << '\n';
+        else{
+              i=pos;
+              if(st[i]==0)
+                std::cout << "No existe" << '\n';
+              else
+                    st[i]=0;
+        }
+  }
 }
-
 void Consultas(/* arguments */)
 {
   int pos; //variable local
@@ -169,6 +198,7 @@ void Consultas(/* arguments */)
               cout << "No existe" << endl;
           else
               cout<<"Precio de compra: "<<pc[pos];
+
        }
 }
 
@@ -181,7 +211,6 @@ void Consultas(/* arguments */)
        else
           return i;
 }
-
 /* Menu de Modificaciones de cuentas y productos. */
 void Modificaciones(/* arguments */) {
   /* code */
@@ -214,38 +243,60 @@ void MostarInventario( )
      }
 
 }
-
 void AdministradorDeCuentasDeUsuario(/* arguments */) {
   int opcion = 0; //variable local
   do
   {
       cout<< "Estas en el modulo Administrador de cuentas de usuario \n";
-      cout<< "1 Alta\n";
-      cout << "2  Baja" << '\n';
-      cout << "3  Consultas" << '\n';
-      cout << "4  Modificaciones"<< '\n';
+      cout<< "1 Alta de usuario \n";
+      cout << "2  Baja de usuario " << '\n';
+      cout << "3  Consultas usuario " << '\n';
+      cout << "4  Modificaciones de usuario "<< '\n';
       cout << "5  Mostrar cuenta de usuario " << '\n';
       cout << "6  Regresar al menu principal" << '\n';
       cin >> opcion;
       switch (opcion)
       {
-              case 1: Altas();
+              case 1: AltaUsuario();
                   break;
-              case 2: Bajas();
+              case 2: BajaUsuario();
                   break;
-              case 3: Consultas();
+              case 3: ConsultaDeUsario();
                   break;
-              case 4: Modificaciones();
+              case 4: ModicacionDeUsuario();
                       break;
               case 5: AdministradorDeCuentasDeUsuario();
                       break;
               case 6: RegresarAlMenuAnterior();
                       break;
-              default : cout << "opcion invalida";
-      }
-  }while(opcion != 6);
-}
+              default : cout << "opcion invalida";\
+            }
+      }while(opcion != 6);
 
+  }
+void AltaUsuario(/* arguments */) {
+  {
+    string name;
+        int i= total; //variable local
+            cout << "Ingrese el nuevo suario : ";
+            cin>> usuario[i];
+            cout << "Usuario agregado " << usuario[i] << endl;
+            cout << "Ingrese la contrasena  : ";
+            cin>>contrasena[i];
+            cout << "contrasena agregada " << contrasena[i]<< endl;
+
+
+ }
+}
+void BajaUsuario(/* arguments */) {
+  /* code */
+}
+void ConsultaDeUsario(/* arguments */) {
+  /* code */
+}
+void ModicacionDeUsuario(/* arguments */) {
+  /* code */
+}
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
   /* code */
