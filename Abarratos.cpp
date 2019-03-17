@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+
 using namespace std;
 
 void Administrador();
@@ -19,6 +20,7 @@ void BajaUsuario();
 void ModicacionDeUsuario();
 void ConsultaDeUsario();
 int total = 5;   //variable globales
+int TotalUsuarios =0;
 int buscar(string BuscarProducto);
 int id[100] ={2,4,1,3,5};
 string producto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
@@ -27,8 +29,8 @@ float pv[100]={10,20,10,15,11};
 int existencia[100]={23,20,12,20,10};
 int nr[100]={5,2,8,5,3};
 int st[100]={1,1,1,1,1};
-string usuario[100];
-string contrasena[100];
+string usuarios[100];
+string contrasenas[100];
 int main()
 {
 int opcion = 0;
@@ -275,36 +277,41 @@ void AdministradorDeCuentasDeUsuario(/* arguments */) {
 
   }
 void AltaUsuario(/* arguments */) {
-     {
-    string usuario,contrasena;
-        int i= total; //variable local
+
+        string usuario,contrasena;
+
+        int i = TotalUsuarios;
+
         while (true)
         {
 
             cout << "Ingrese nombre del nuevo usuario : ";
-            cin>>usuario;
+            cin >> usuario;
+
             if (usuario == "*")
                 break;
             cout << "Ingrese contrasena";
-            std::cin >> contrasena;
+            cin >> contrasena;
+
+            usuarios[TotalUsuarios] = usuario;
+            contrasenas[TotalUsuarios] = contrasena;
 
             i++;
+            TotalUsuarios=i;
         }
-        total =i;
+
     }
 
-
-
-
-}
 void BajaUsuario(/* arguments */) {
   /* code */
 }
 void ConsultaDeUsario(/* arguments */) {
-  /* code */
+std::cout << "Los usuarios registrados son: " << '\n';
+ for (int h = 0; h < TotalUsuarios; h++)
+std::cout <<usuarios[h]<< '\n';
 }
 void ModicacionDeUsuario(/* arguments */) {
-  /* code */
+
 }
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
