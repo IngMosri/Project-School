@@ -1,9 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-
 using namespace std;
-
 void Administrador();
 void Ventas(); /*prototipos*/
 void Altas();
@@ -19,6 +17,10 @@ void AltaUsuario();
 void BajaUsuario();
 void ModicacionDeUsuario();
 void ConsultaDeUsario();
+void ModificacionPC();
+void ModificacionesDePV();
+void ModificacionExistencias();
+void ModificacionNR();
 int total = 5;   //variable globales
 int TotalUsuarios =0;
 int buscar(string BuscarProducto);
@@ -167,19 +169,19 @@ void Bajas(/* arguments */) {
   string BuscarProducto;
   int i,pos;
   while(true){
-        std::cout << "Producto" << '\n';
+        std::cout << "Producto que se quire dar de baja" << '\n';
         std::cin >> producto;
         if(producto=="*")
                           break;
         int buscar(string BuscarProducto);
         pos=buscar(producto);
-        std::cout << "productos" << '\n';
+        std::cout << "producto dado de baja " << '\n';
         if(pos==-1)
                  std::cout << "no existe" << '\n';
         else{
               i=pos;
               if(st[i]==0)
-                std::cout << "No existe" << '\n';
+                std::cout << "Producto dado de baja" << '\n';
               else
                     st[i]=0;
         }
@@ -191,15 +193,16 @@ void Consultas(/* arguments */)
       string BuscarProducto;
       while (true) {
           int i = 0;
-          cout << "Producto";
+          cout << "Producto que desea consultar :";
           cin>>BuscarProducto;
           if (BuscarProducto=="*")
               break;
           pos=buscar(BuscarProducto);
           if (pos==-1)
-              cout << "No existe" << endl;
+              cout << "No existe o esta dado de baja " << endl;
           else
-              cout<<"Precio de compra: "<<pc[pos];
+              std::cout << "Producto En el inventario: " <<producto[pos]<<'\n' ;
+
 
        }
 }
@@ -215,8 +218,87 @@ void Consultas(/* arguments */)
 }
 /* Menu de Modificaciones de cuentas y productos. */
 void Modificaciones(/* arguments */) {
-  /* code */
+  	int pos;
+  	int opcion = 0;
+  	string name;
+
+  	while ( true )
+  	{
+  	    cout << "Cual es el producto para modificar: ?";
+          cin>>name;
+          if (name == "*")
+              break;
+          pos=buscar(name);
+          if (pos==-1)
+              cout<< "Este producto no existe"<< endl;
+          else
+           {
+  	    	do{
+
+  	            cout << "Que desea modificar\n";
+  	            cout << "1.- Precio de compra \n";
+  	            cout << "2.- Precio de venta \n";
+  	            cout << "3.- Existencias \n";
+  	            cout << "4.- NR(Nivel de reorden)\n";
+  	            cout << "5.- Salir y guardar cambios \n";
+  	            cout << "Opci�n \n";
+  	            cin >> opcion;
+
+                switch (opcion)
+                {
+
+                case 1:ModificacionPC();
+        break;
+    case 2: ModificacionesDePV();
+        break;
+    case 3: ModificacionExistencias();
+        break;
+    case 4: ModificacionNR();
+        break;
+    case 5: cout << "Cambios Guardados";
+    default: cout << "opcion invalida \n";
+    }
+}while (opcion != 5);
+  }
+   }
 }
+
+void ModificacionPC(){
+int pos;
+int PrecioDecompra;
+cout<<"Ingrese el nuevo precio de compra"<< endl;
+cin>>PrecioDecompra;
+  if(PrecioDecompra!= 0)
+    pc[pos]  = PrecioDecompra;
+}
+
+void ModificacionesDePV(){
+int pos;
+int PrecioDeVenta;
+  cout<<"Ingrese el nuevo precio de venta"<< endl;
+  cin>>PrecioDeVenta;
+  if(PrecioDeVenta!= 0)
+    pv[pos]  = PrecioDeVenta;
+}
+
+void ModificacionExistencias(){
+int pos;
+int NuevasExistencias;
+cout<<"Ingrese las nuevas existencias del producto "<< endl;
+cin>>NuevasExistencias;
+  if(NuevasExistencias != 0)
+    existencia[pos]  = NuevasExistencias;
+}
+
+void ModificacionNR(){
+int pos;
+int NuevoNivelDeReorden;
+cout<<"Ingrese el nuevo NR(nivel de reorden) "<< endl;
+cin>>NuevoNivelDeReorden;
+if(NuevoNivelDeReorden != 0)
+  nr[pos]  = NuevoNivelDeReorden;
+}
+
 
 /* Menu de constual de inventario */
 void MostarInventario( )
@@ -233,12 +315,14 @@ void MostarInventario( )
          int h;
          cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
          for (h = 0; h < total; h++)
+         if(st[h]==1)
             cout<<setw(10)<<id[h]<<setw(20)<< producto[h] <<setw(10)<<pc[h]<<setw(10)<<pv[h]<<setw(12)<<existencia[h]<<setw(10)<<nr[h]<<setw(10)<<st[h]<<endl;
              break;
         case 2:
      int j;
      cout<<setw(10)<<"Producto"<<setw(20)<<"ID"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
     for (j = 0; j < total; j++)
+    if(st[j]==1)
         cout<<setw(10)<<producto[j]<<setw(20)<<id[j] <<setw(10)<<pc[j]<<setw(10)<<pv[j]<<setw(12)<<existencia[j]<<setw(10)<<nr[j]<<setw(10)<<st[j]<<endl;
          break;
        }
@@ -303,7 +387,24 @@ void AltaUsuario(/* arguments */) {
     }
 
 void BajaUsuario(/* arguments */) {
-  /* code */
+string usuarios;
+int i,pos;
+while (true) {
+  std::cout << "Usuario que se quiere dar de baja" << '\n';
+  std::cin >> usuarios;
+  if(usuarios=="*")
+     break;
+     pos= buscar(usuarios);
+     if(pos== -1)
+        std::cout << "Usuario no existe" << '\n';
+        else{
+          i = pos;
+        if(usuarios[i]==0)
+        std::cout << "No existe" << '\n';
+        else
+        usuarios[i]=0;
+        }
+    }
 }
 void ConsultaDeUsario(/* arguments */) {
 std::cout << "Los usuarios registrados son: " << '\n';
