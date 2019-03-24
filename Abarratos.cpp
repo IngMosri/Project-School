@@ -17,12 +17,15 @@ void AltaUsuario();
 void BajaUsuario();
 void ModicacionDeUsuario();
 void ConsultaDeUsario();
-void ModificacionPC();
+void ModificacionPC(int pos);
 void ModificacionesDePV();
 void ModificacionExistencias();
 void ModificacionNR();
+void ContinuarVenta();
+void SalirDeVenta();
 int total = 5;   //variable globales
 int TotalUsuarios =0;
+int cantidad_v;
 int buscar(string BuscarProducto);
 int id[100] ={2,4,1,3,5};
 string producto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
@@ -36,7 +39,6 @@ string contrasenas[100];
 int main()
 {
 int opcion = 0;
-
 
     {
         cout<< "menu\n";
@@ -58,12 +60,65 @@ int opcion = 0;
     return 0;
  }
 
-void Ventas(/* arguments */) {
-  /* code */
-}
+void Ventas(/* arguments */){
+  string productos;
+  int pos;
+  int i;
+  int opcion; //variable local
+  cout << "Estas Accediendo al apartado de ventas " << endl;
+  std::cout << "Bienvenido" << '\n';
+  /*i=total;
+    	y=VentaTotal;
+    	x=CantidadTotal;
+      */
+  while (true) {
+    cout << "Ingrese el producto que desea Vender :  ";
+    cin >> productos;
+    if (productos== "1")
+           break;
+          else {
+      if (productos != "*") {
+        int buscar(string BuscarProducto);
+        pos = buscar(productos);
+        if (pos == -1)
+        
+          cout << "Poducto no se encuentra en el inventario " << endl;
+        else {
+          i = pos;
+          if (st[i] == 0)
+            cout << "Poducto no exite " << endl;
+          else {
+            if (existencia[i] == 0)
+              cout << "No hay  :  " << productos[i] << endl;
+            else {
+              cout << "Cantidad:  ";
+              cin >> cantidad_v;
+              if (cantidad_v > existencia[i]) {
+                cout << "No tenemos lo suficiente : " << cantidad_v << " solo tenemos la siguiente cantidad : " << existencia[i] << endl;
+                cout << "Aun asi desea continuar con la venta?" << endl << "1. si" << endl << "2. No" << endl;
+                cin >> opcion;
+                if (opcion == 1)
+                  cantidad_v = existencia[i];
+                existencia[i] = 0;
+                }
+               else {
+                existencia[i] -= cantidad_v;
+                if (existencia[i] < nr[i])
+                  cout << "Solicitar mas producto con el provedor :  " << productos[i] << endl;
+
+              }
+
+            }
+          }
+        }
+      }
+    }
+  }
+  }
+
 /* Menu de administradir */
-void Administrador()
-{
+void Administrador(){
+
   {
     int password;
        password = 1234;
@@ -104,8 +159,8 @@ void Administrador()
         cout << "4  Modificaciones"<< '\n';
         cout << "5  Mostrar inventario" << '\n';
         cout << "6  Administrador de cuentas" << '\n';
-        cout << "7  Regresar al menu principal" << '\n';
-        cout << "8  Salir" << '\n';
+        cout << "7  Corte de caja General" << '\n';
+        cout << "8  Regresar al menu anterior" << '\n';
         cin >> opcion;
         switch (opcion)
         {
@@ -236,26 +291,26 @@ void Modificaciones(/* arguments */) {
   	    	do{
 
   	            cout << "Que desea modificar\n";
-  	            cout << "1.- Precio de compra \n";
-  	            cout << "2.- Precio de venta \n";
-  	            cout << "3.- Existencias \n";
-  	            cout << "4.- NR(Nivel de reorden)\n";
-  	            cout << "5.- Salir y guardar cambios \n";
-  	            cout << "Opci�n \n";
+  	            cout << "1. Precio de compra(PC) \n";
+  	            cout << "2. Precio de venta(PV) \n";
+  	            cout << "3. Existencias \n";
+  	            cout << "4. NR(Nivel de reorden)\n";
+  	            cout << "5. Salir y guardar cambios \n";
+  	            cout << "Opcion \n";
   	            cin >> opcion;
 
                 switch (opcion)
                 {
 
-                case 1:ModificacionPC();
-        break;
-    case 2: ModificacionesDePV();
-        break;
-    case 3: ModificacionExistencias();
-        break;
-    case 4: ModificacionNR();
-        break;
-    case 5: cout << "Cambios Guardados";
+                       case 1:ModificacionPC(pos);
+                             break;
+                       case 2: ModificacionesDePV();
+                             break;
+                       case 3: ModificacionExistencias();
+                             break;
+                       case 4: ModificacionNR();
+                             break;
+                       case 5: cout << "Cambios Exitosamente Guardados\n";
     default: cout << "opcion invalida \n";
     }
 }while (opcion != 5);
@@ -263,8 +318,7 @@ void Modificaciones(/* arguments */) {
    }
 }
 
-void ModificacionPC(){
-int pos;
+void ModificacionPC(int pos){
 int PrecioDecompra;
 cout<<"Ingrese el nuevo precio de compra"<< endl;
 cin>>PrecioDecompra;
@@ -416,8 +470,22 @@ void ModicacionDeUsuario(/* arguments */) {
 }
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
-  /* code */
+int j;
+    for (j = 0; j <TotalUsuarios;)
+         break;
+         cout<<setw(40)<<"Abarrotes el Mosri\n \n \n"<<endl;
+         cout << "Vendedor:" <<usuarios[j]<<'\n';
+          cout<<setw(20)<<"Producto"<<setw(17)<<"Cantidad"<<setw(18)<<"Precio unitario"<<setw(18)<<"Subtotal"<<endl;
+
+
+
 }
 void RegresarAlMenuAnterior(/* arguments */) {
   /* code */
+}
+void ContinuarVenta(/* arguments */) {
+  /* code */
+}
+void SalirDeVenta(){
+
 }
