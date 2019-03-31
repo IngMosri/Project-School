@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -21,12 +22,17 @@ void ModificacionPC(int pos);
 void ModificacionesDePV();
 void ModificacionExistencias();
 void ModificacionNR();
-void ContinuarVenta();
-void SalirDeVenta();
+void TicketDeventa();
+int VentaTotal=0;
+int CantidadTotal;
 int total = 5;   //variable globales
 int TotalUsuarios =0;
 int cantidad_v;
+string prod[100];
+int Subtotal = 0;
+int Importe=0;
 int buscar(string BuscarProducto);
+string UsuarioVenta;
 int id[100] ={2,4,1,3,5};
 string producto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
 float pc[100]={10,10,10,10,10};
@@ -64,32 +70,49 @@ void Ventas(/* arguments */){
   string productos;
   int pos;
   int i;
+  int j;
+  int z;
+  int y=VentaTotal;
+  string VentaUsuario, Ventacontrasena;
+  int x=CantidadTotal;
   int opcion; //variable local
+  string Vendedor;
+
   cout << "Estas Accediendo al apartado de ventas " << endl;
-  std::cout << "Bienvenido" << '\n';
-  /*i=total;
-    	y=VentaTotal;
-    	x=CantidadTotal;
-      */
+  std::cout << "Introduce usuario y contrasena " << endl;
+  cin>>VentaUsuario;
+  cin>>Ventacontrasena;
+  for(z=0; z<TotalUsuarios; z++){
+    if(VentaUsuario==usuarios[z]){
+      if(Ventacontrasena==contrasenas[z]){
+      UsuarioVenta = VentaUsuario;
+        std::cout << "Bienvenido Usuario   "<<UsuarioVenta << '\n';
+      }
+    }
+
+  }
   while (true) {
     cout << "Ingrese el producto que desea Vender :  ";
     cin >> productos;
-    if (productos== "1")
-           break;
+    if (productos== "**")
+     return Administrador();
           else {
-      if (productos != "*") {
+      if (productos == "*")
+       return TicketDeventa();
+       {
         int buscar(string BuscarProducto);
         pos = buscar(productos);
         if (pos == -1)
-        
+
           cout << "Poducto no se encuentra en el inventario " << endl;
         else {
           i = pos;
+          prod[y]=productos;
           if (st[i] == 0)
             cout << "Poducto no exite " << endl;
           else {
             if (existencia[i] == 0)
-              cout << "No hay  :  " << productos[i] << endl;
+              cout << "Ya no queda"<< productos[i]<<endl;
             else {
               cout << "Cantidad:  ";
               cin >> cantidad_v;
@@ -105,11 +128,14 @@ void Ventas(/* arguments */){
                 existencia[i] -= cantidad_v;
                 if (existencia[i] < nr[i])
                   cout << "Solicitar mas producto con el provedor :  " << productos[i] << endl;
+                else{
 
+                }
               }
-
-            }
+              }
+            y++;
           }
+          VentaTotal=y;
         }
       }
     }
@@ -470,22 +496,37 @@ void ModicacionDeUsuario(/* arguments */) {
 }
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
-int j;
-    for (j = 0; j <TotalUsuarios;)
-         break;
-         cout<<setw(40)<<"Abarrotes el Mosri\n \n \n"<<endl;
-         cout << "Vendedor:" <<usuarios[j]<<'\n';
-          cout<<setw(20)<<"Producto"<<setw(17)<<"Cantidad"<<setw(18)<<"Precio unitario"<<setw(18)<<"Subtotal"<<endl;
-
 
 
 }
 void RegresarAlMenuAnterior(/* arguments */) {
-  /* code */
-}
-void ContinuarVenta(/* arguments */) {
-  /* code */
-}
-void SalirDeVenta(){
+  int opcion = 0; //variable local
+  do{
+    std::cout << "1. Menu administrador" << '\n';
+    std::cout << "2. Menu ventas" << '\n';
+    cin >> opcion;
+    switch (opcion)
+      {
 
+            case 1: Administrador();
+                  break;
+            case 2: Ventas();
+                  break;
+      }
+  }         while(opcion != 6);
+
+
+      {
+  }
+}
+void TicketDeventa(){
+cout<<setw(40)<<"Abarrotes el Mosri\n \n \n"<<endl;
+int i=0;
+std::cout << "Vendedor"<<UsuarioVenta<< '\n';
+    for (i= 0;i<VentaTotal;i++)
+    {
+      cout<<setw(20)<<"Producto "<<prod[i]<<setw(20)<<"Cantidad "<<cantidad_v<< setw(20)<<"Precio " <<pv[i]<<endl;
+      Subtotal +=pv[i];
+    }
+    cout<<"Subtotal = "<<Subtotal<<endl;
 }
