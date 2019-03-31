@@ -22,6 +22,8 @@ void ModificacionPC(int mod);
 void ModificacionesDePV(int mod);
 void ModificacionExistencias(int mod);
 void ModificacionNR(int mod);
+void ModificacionDeUsuarioRegistrado(int modUs);
+void ModificacionDeContrasenaRegistrado(int modUs);
 void TicketDeventa();
 int VentaTotal=0;
 int CantidadTotal;
@@ -309,8 +311,8 @@ void Modificaciones(/* arguments */) {
           cin>>modicaciones;
           if (modicaciones == "*")
               break;
-          pos=buscar(modicaciones);
-          if (pos==-1)
+          mod=buscar(modicaciones);
+          if (mod==-1)
               cout<< "Este producto no existe"<< endl;
           else
            {
@@ -322,7 +324,6 @@ void Modificaciones(/* arguments */) {
   	            cout << "3. Existencias \n";
   	            cout << "4. NR(Nivel de reorden)\n";
   	            cout << "5. Salir\n";
-  	            cout << "Opcion \n";
   	            cin >> opcion;
 
                 switch (opcion)
@@ -348,7 +349,6 @@ void ModificacionPC(int mod){
 int PrecioDecompra;
 cout<<"Ingrese el nuevo precio de compra"<< endl;
 cin>>PrecioDecompra;
-  if(PrecioDecompra!= 0)
     pc[mod]  = PrecioDecompra;
 }
 
@@ -356,7 +356,6 @@ void ModificacionesDePV(int mod){
 int PrecioDeVenta;
   cout<<"Ingrese el nuevo precio de venta"<< endl;
   cin>>PrecioDeVenta;
-  if(PrecioDeVenta!= 0)
     pv[mod]  = PrecioDeVenta;
 }
 
@@ -364,7 +363,6 @@ void ModificacionExistencias(int mod){
 int NuevasExistencias;
 cout<<"Ingrese las nuevas existencias del producto "<< endl;
 cin>>NuevasExistencias;
-  if(NuevasExistencias != 0)
     existencia[mod]  = NuevasExistencias;
 }
 
@@ -372,7 +370,6 @@ void ModificacionNR(int mod){
 int NuevoNivelDeReorden;
 cout<<"Ingrese el nuevo NR(nivel de reorden) "<< endl;
 cin>>NuevoNivelDeReorden;
-if(NuevoNivelDeReorden != 0)
   nr[mod]  = NuevoNivelDeReorden;
 }
 
@@ -489,8 +486,55 @@ std::cout << "Los usuarios registrados son: " << '\n';
 std::cout <<usuarios[h]<< '\n';
 }
 void ModicacionDeUsuario(/* arguments */) {
+  int modUs;
+  int opcion =0;
+  string modicacionUsuario;
+  while (true)
+  {
+    std::cout << "Escriba el nombre de usuario que quiere modificar" << '\n';
+    std::cin >> modicacionUsuario;
+    if(modicacionUsuario=="*")
+       break;
+    modUs=buscar(modicacionUsuario);
+    if(modUs==-1)
+      std::cout << "Este Usuario no Existe" << '\n';
+    else
+    {
+      do{
+        std::cout << "1.  modificar nombre de usuario" << '\n';
+        std::cout << "2. modificar contrasena" << '\n';
+        std::cout << "3. Salir" << '\n';
+        cin>> opcion;
+        switch (opcion)
+        {
+
+          case 1:ModificacionDeUsuarioRegistrado(modUs);
+                break;
+          case 2:ModificacionDeContrasenaRegistrado(modUs);
+                break;
+        }
+      }while (opcion !=2);
+      return AdministradorDeCuentasDeUsuario();
+      }
+
+      }
+    }
+
+void ModificacionDeUsuarioRegistrado(int modUs) {
+int NuevoUsuario;
+std::cout << "Ingrese el nuevo usuario" << '\n';
+std::cin >> NuevoUsuario;
+usuarios[modUs] = NuevoUsuario;
 
 }
+void ModificacionDeContrasenaRegistrado(int modUs) {
+int NuevaContrasena;
+std::cout << "Ingrese nueva contrasena" << '\n';
+std::cin >> NuevaContrasena;
+contrasenas[modUs] = NuevaContrasena;
+
+}
+
 /* Menu de corte de caja general*/
 void CorteDecajaGeneral(/* arguments */) {
 
