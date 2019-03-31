@@ -18,10 +18,10 @@ void AltaUsuario();
 void BajaUsuario();
 void ModicacionDeUsuario();
 void ConsultaDeUsario();
-void ModificacionPC(int pos);
-void ModificacionesDePV();
-void ModificacionExistencias();
-void ModificacionNR();
+void ModificacionPC(int mod);
+void ModificacionesDePV(int mod);
+void ModificacionExistencias(int mod);
+void ModificacionNR(int mod);
 void TicketDeventa();
 int VentaTotal=0;
 int CantidadTotal;
@@ -299,17 +299,17 @@ void Consultas(/* arguments */)
 }
 /* Menu de Modificaciones de cuentas y productos. */
 void Modificaciones(/* arguments */) {
-  	int pos;
+    int mod;
   	int opcion = 0;
-  	string name;
+  	string modicaciones;
 
   	while ( true )
   	{
   	    cout << "Cual es el producto para modificar: ?";
-          cin>>name;
-          if (name == "*")
+          cin>>modicaciones;
+          if (modicaciones == "*")
               break;
-          pos=buscar(name);
+          pos=buscar(modicaciones);
           if (pos==-1)
               cout<< "Este producto no existe"<< endl;
           else
@@ -321,62 +321,59 @@ void Modificaciones(/* arguments */) {
   	            cout << "2. Precio de venta(PV) \n";
   	            cout << "3. Existencias \n";
   	            cout << "4. NR(Nivel de reorden)\n";
-  	            cout << "5. Salir y guardar cambios \n";
+  	            cout << "5. Salir\n";
   	            cout << "Opcion \n";
   	            cin >> opcion;
 
                 switch (opcion)
                 {
 
-                       case 1:ModificacionPC(pos);
+                       case 1:ModificacionPC(mod);
                              break;
-                       case 2: ModificacionesDePV();
+                       case 2: ModificacionesDePV(mod);
                              break;
-                       case 3: ModificacionExistencias();
+                       case 3: ModificacionExistencias(mod);
                              break;
-                       case 4: ModificacionNR();
+                       case 4: ModificacionNR(mod);
                              break;
                        case 5: cout << "Cambios Exitosamente Guardados\n";
-    default: cout << "opcion invalida \n";
     }
 }while (opcion != 5);
+return Administrador();
   }
    }
 }
 
-void ModificacionPC(int pos){
+void ModificacionPC(int mod){
 int PrecioDecompra;
 cout<<"Ingrese el nuevo precio de compra"<< endl;
 cin>>PrecioDecompra;
   if(PrecioDecompra!= 0)
-    pc[pos]  = PrecioDecompra;
+    pc[mod]  = PrecioDecompra;
 }
 
-void ModificacionesDePV(){
-int pos;
+void ModificacionesDePV(int mod){
 int PrecioDeVenta;
   cout<<"Ingrese el nuevo precio de venta"<< endl;
   cin>>PrecioDeVenta;
   if(PrecioDeVenta!= 0)
-    pv[pos]  = PrecioDeVenta;
+    pv[mod]  = PrecioDeVenta;
 }
 
-void ModificacionExistencias(){
-int pos;
+void ModificacionExistencias(int mod){
 int NuevasExistencias;
 cout<<"Ingrese las nuevas existencias del producto "<< endl;
 cin>>NuevasExistencias;
   if(NuevasExistencias != 0)
-    existencia[pos]  = NuevasExistencias;
+    existencia[mod]  = NuevasExistencias;
 }
 
-void ModificacionNR(){
-int pos;
+void ModificacionNR(int mod){
 int NuevoNivelDeReorden;
 cout<<"Ingrese el nuevo NR(nivel de reorden) "<< endl;
 cin>>NuevoNivelDeReorden;
 if(NuevoNivelDeReorden != 0)
-  nr[pos]  = NuevoNivelDeReorden;
+  nr[mod]  = NuevoNivelDeReorden;
 }
 
 
