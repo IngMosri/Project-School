@@ -255,30 +255,36 @@ void Altas(/* arguments */)
 
 void Bajas(/* arguments */) {
     string producto;
-    string BuscarProducto;
-    int i,pos;
-    while(true){
-        std::cout << "Producto que se quire dar de baja" << '\n';
+    int BuscarProducto;
+    int i, pos;
+    while(true) {
+        std::cout << "Producto que se quiere dar de baja" << '\n';
         std::cin >> producto;
         if(producto=="*")
             break;
-        int buscar(string BuscarProducto);
-        pos=buscar(producto);
+      // int buscar(string BuscarProducto);
+        pos = buscar(producto);
         std::cout << "producto dado de baja " << '\n';
         if(pos==-1)
             std::cout << "no existe" << '\n';
-        else{
-            i=pos;
-            if(st[i]==0)
+        else {
+            if (st[pos]==1)
+            {
                 std::cout << "Producto dado de baja" << '\n';
-            else
-                st[i]=0;
+                st[pos]=-1;
+            }
         }
     }
 }
 void Consultas(/* arguments */)
 {
     int pos; //variable local
+    int precio_compra;
+    int precio_venta;
+    int existencia_consultas;
+    int numero_de_reorden;
+    int status;
+
     string BuscarProducto;
     while (true) {
         int i = 0;
@@ -287,12 +293,14 @@ void Consultas(/* arguments */)
         if (BuscarProducto=="*")
             break;
         pos=buscar(BuscarProducto);
-        if (pos==-1)
+        if (pos == -1 || st[pos] == -1)
             cout << "No existe o esta dado de baja " << endl;
-        else
+        else{
             std::cout << "Producto En el inventario: " <<producto[pos]<<'\n' ;
-
-
+            std::cout << "Precio de compra " <<pc[pos]<< '\n';
+            std::cout << "Precio de venta" <<pv[pos]<< '\n';
+            std::cout << "Status " <<st[pos]<< '\n';
+          }
     }
 }
 
@@ -318,7 +326,7 @@ void Modificaciones(/* arguments */) {
         if (modicaciones == "*")
             break;
         mod=buscar(modicaciones);
-        if (mod==-1)
+        if (mod == -1 || st[mod] == -1)
             cout<< "Este producto no existe"<< endl;
         else
         {
@@ -392,14 +400,97 @@ void MostarInventario( )
         std::cin >> opcion;
         switch (opcion){
             case 1:
-                int h;
+
+                for (int i = 1; i < total; i++)
+                {
+                    for (int j = 0; j < total-i; j++)
+                    {
+                        // id[i] = 5
+                        // id[j] = 3
+                        if (id[j] > id[j + 1])
+//                        if (producto[j] > producto[j + 1])
+                        {
+                            int temporal = id[j];
+                            id[j] = id[j + 1];
+                            id[j+ 1] = temporal;
+
+                            string tempString = producto[j];
+                            producto[j] = producto[j + 1];
+                            producto[j+ 1] = tempString;
+
+                            temporal = pc[j];
+                            pc[j] = pc[j + 1];
+                            pc[j+ 1] = temporal;
+
+                            temporal = pv[j];
+                            pv[j] = pv[j + 1];
+                            pv[j+ 1] = temporal;
+
+                                temporal = existencia[j];
+                            existencia[j] = existencia[j + 1];
+                            existencia[j+ 1] = temporal;
+
+                                temporal = nr[j];
+                            nr[j] = nr[j + 1];
+                            nr[j+ 1] = temporal;
+
+                                temporal = st[j];
+                            st[j] = st[j + 1];
+                            st[j+ 1] = temporal;
+                        }
+                    }
+                }
+
                 cout<<setw(10)<<"ID"<<setw(20)<<"Producto"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
-                for (h = 0; h < total; h++)
+                for (int h = 0; h < total; h++)
+                {
                     if(st[h]==1)
+                    {
                         cout<<setw(10)<<id[h]<<setw(20)<< producto[h] <<setw(10)<<pc[h]<<setw(10)<<pv[h]<<setw(12)<<existencia[h]<<setw(10)<<nr[h]<<setw(10)<<st[h]<<endl;
+                    }
+                }
                 break;
             case 2:
                 int j;
+                 for (int i = 1; i < total; i++)
+                {
+                    for (int j = 0; j < total-i; j++)
+                    {
+
+                        if (producto[j] > producto[j + 1])
+                        {
+                            int temporal = id[j];
+                            id[j] = id[j + 1];
+                            id[j+ 1] = temporal;
+
+                            string tempString = producto[j];
+                            producto[j] = producto[j + 1];
+                            producto[j+ 1] = tempString;
+
+                            temporal = pc[j];
+                            pc[j] = pc[j + 1];
+                            pc[j+ 1] = temporal;
+
+                            temporal = pv[j];
+                            pv[j] = pv[j + 1];
+                            pv[j+ 1] = temporal;
+
+                                temporal = existencia[j];
+                            existencia[j] = existencia[j + 1];
+                            existencia[j+ 1] = temporal;
+
+                                temporal = nr[j];
+                            nr[j] = nr[j + 1];
+                            nr[j+ 1] = temporal;
+
+                                temporal = st[j];
+                            st[j] = st[j + 1];
+                            st[j+ 1] = temporal;
+                        }
+                    }
+                }
+
+
                 cout<<setw(10)<<"Producto"<<setw(20)<<"ID"<<setw(10)<<"PC"<<setw(10)<<"PV"<<setw(12)<<"Existencias"<<setw(10)<<"NR"<<setw(10)<<"ST"<<endl;
                 for (j = 0; j < total; j++)
                     if(st[j]==1)
@@ -546,18 +637,17 @@ void CorteDecajaGeneral(/* arguments */) {
     cout<<setw(40)<<"Abarrotes el Mosri\n \n \n"<<endl;
     int i=0;
     int l=1;
-    u=0;
-
 
     for(int z(0);z<u;z++) {
-            std::cout << "Vendedor: " << UsuarioVenta[z] << '\n';
     }
 
     for (i= 0;i<v;i++)
     {
-        cout<<setw(20)<<"Producto "<<corteTicket[l];l++;cout<<setw(20)<<"Cantidad "<<corteTicketInt[l];l++;cout<< setw(20)<<"Precio " <<corteTicketInt[l];l++;cout<<endl;
+        cout<<setw(10)<<"Vendedor"<< UsuarioVenta[l]<<endl;
         Subtotal +=pv[i]*cantidad_v[i];
+
     }
+
     cout<<"Subtotal = "<<Subtotal<<endl;
 }
 void RegresarAlMenuAnterior(/* arguments */) {
@@ -583,15 +673,13 @@ void RegresarAlMenuAnterior(/* arguments */) {
 void TicketDeventa(){
     cout<<setw(40)<<"Abarrotes el Mosri\n \n \n"<<endl;
     int i=0;
-    std::cout << "Vendedor: "<<UsuarioVenta[i]<< '\n';
+    std::cout << "Vendedor: "<<UsuarioVenta[h]<< '\n';h++;
     v--;
     for (i= 0;i<VentaTotal;i++)
     {
             cout << setw(20) << "Producto " << prod[i] << setw(20) << "Cantidad " << cantidad_v[i] << setw(20)
                  << "Precio " << pv[i] << endl;
             Subtotal += pv[i] * cantidad_v[i];
-
-            corteTicket[0] = VentaTotal;
             corteTicket[k] = prod[i];
             k++;
             corteTicketInt[k] = cantidad_v[i];
@@ -601,5 +689,6 @@ void TicketDeventa(){
     }
     cout<<"Subtotal = "<<Subtotal<<endl;
     VentaTotal = 0;
+    Subtotal =0;
 
 }
