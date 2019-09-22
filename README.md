@@ -3,5 +3,5 @@ Project from College in C++.
 
 
 
-Hello In this repository you will see al the example and project that im doing in currently in the class of c++ in the college. 
+Hello In this repositories you will see al the example and project that im doing in currently in the class of c++ in the college. 
 
