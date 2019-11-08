@@ -1,34 +1,33 @@
 #include <iostream>
-#include <iomanip>
+#include <fstream>
 #include <string>
-#include <unistd.h>
+#include <cstring>
+#include <iomanip>
+
 using namespace std;
 //Variables Globales
 int total =0;
-string NombreProducto[100]={"Leche","Pan","Agua","Huevos","Refresco"};
-int PrecioDeCompra[100]={10,10,10,10,10};
-int PrecioDeVenta[100]={10,20,10,15,11};
-int ExistenciaFisicas[100]={23,20,12,20,10};
-int NumeroDeReorden[100]={5,2,8,5,3};
-int StatusDelProducto[100]={1,1,1,1,1};
-
-struct productos{
-
-
-    string NombreProducto;
-    int PrecioDeCompra;
-    int PrecioDeVenta;
-    int ExistenciaFisicas;
-    int NumeroDeReorden;
-    int StatusDelProducto;
-    } ;
-
-    productos info[100]; // declaracion del arreglo de estructuras
+struct nodo {
+    int indice;
+  char producto[80];
+  int pc;
+  int pv;
+  int exi;
+  int nvlr;
+    nodo *siguiente;
+    nodo *anterior;
+};
+nodo *ptr = NULL;
+nodo *inicio = NULL;
+nodo *fin = NULL;
+nodo *nuevo = NULL;
 
 void Altas();
 void Mostrar();
 void Administrador();
 void Ventas();
+void Escritura();
+void Lectura();
 int main() {
     //menu
 
@@ -111,40 +110,46 @@ void Administrador(){
     
 
 void Altas(){
-      int i;
-    i=total;
-    int valor_temp;
-
-    while (true) {
-        cout << "Ingrese Indice del producto: ";
-        cin>>valor_temp;
-        if (valor_temp == 0)
-            break;
-        cout << "Nombre del producto: ";
-        cin >> info[i].NombreProducto;
-        cout << "Precio de compra: ";
-        cin >> info[i].PrecioDeCompra;
-        cout << "Precio de venta: ";
-        cin >> info[i].PrecioDeVenta;
-        cout << "Existencias Fisicas: ";
-        cin >> info[i].ExistenciaFisicas;
-        cout << "Numero de Reorden: ";
-        cin >> info[i].NumeroDeReorden;
-          cout <<"Status del Producto(Si es 1 esta activo 0 esta desactivado)";
-        cin >> info[i].StatusDelProducto;
-        i++;
-    }
-    total = i;
+     
 
 }
 void Mostrar(){
-    int i;
-  for(i=0;i<total;i++)
-      cout<<"Nombre del producto: "<<info[i].NombreProducto<<'\n'<<"Precio de compra: "<<info[i].PrecioDeCompra<<'\n'<<"Precio de venta: "<<info[i].PrecioDeVenta<<'\n'<<"Existencias Fisicas: "<<info[i].ExistenciaFisicas<<'\n'<<"Numero de reorden: "<<info[i].NumeroDeReorden<<'\n'<<"Status del producto: "<<info[i].StatusDelProducto<<'\n';
+
+}
+void Escritura(){
 
 }
 void Ventas(){
 
 }
+void Lectura(){
+    fstream ArchivoInventario("ArchivoInventario.bin",ios::in | ios::binary);
+    int total = 0;
+  int indice;
+  char NombreProducto[80];
+  int PrecioDeCompra;
+  int PrecioDeVenta;
+  int ExistenciaFisicas;
+  int NumeroDeReorden;
+if(!ArchivoInventario)
+        cout<<"Error en la apertura del archivo";
+    else{
+        cout<<left<<setw(8)<<"Indice"<<setw(20)<<"Nombre del Producto"<<setw(10)<<"Precio de Compra"<<setw(10)<<"Precio de venta"<<setw(10)<<"Existencias"<<setw(10)<<"Numero de Reorden"<<endl;
+        ArchivoInventario.read(
+          reinterpret_cast < char * > ( & indice), sizeof(indice));
+        ArchivoInventario.read(NombreProducto, 80);
+        ArchivoInventario.read(
+          reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+        ArchivoInventario.read(
+          reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+        ArchivoInventario.read(
+          reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+        ArchivoInventario.read(
+          reinterpret_cast < char * > ( & NumeroDeReorden), sizeof(NumeroDeReorden));
+
+            nuevo =new(nodo);
+            strcpy(nuevo->producto,NombreProducto);
+            nuevo->pc=PrecioDeCompra;
+            nuevo->pv=PrecioDeVenta;
     
 
