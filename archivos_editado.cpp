@@ -7,8 +7,8 @@
 using namespace std;
 
 int main() {
-  //nombre del archivo binario 
-  fstream ArchivoInventario("inventario.bin", ios::app | ios::binary);
+  //nombre del archivo binario
+  ofstream ArchivoInventario("inventario1.bin",ios::out | ios::binary);
 
   //Variables Globales
   int total = 0;
