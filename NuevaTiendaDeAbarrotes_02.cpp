@@ -8,7 +8,7 @@ using namespace std;
 //Variables Globales
 int total = 0;
 struct nodo {
-  int indice;
+  int ind;
   char producto[80];
   int pc;
   int pv;
@@ -110,7 +110,7 @@ void Administrador() {
 
 
 void Escritura() {
-  fstream ArchivoInventario("inventario.bin", ios:: in | ios::binary);
+  ofstream ArchivoInventario("inventario1.bin", ios:: app | ios::binary);
 int indice;
     char NombreProducto[80];
     int PrecioDeCompra;
@@ -119,7 +119,7 @@ int indice;
     int NivelDeReorden;
     if (!ArchivoInventario)
     cout<<"Error en la apertura del archivo";
-else{
+    else{
         do{
             cout<<"Escriba el indice del poducto(0 para salir debe empezar en # 5 en adelante)  ";
             cin>>indice;
@@ -135,16 +135,12 @@ else{
                 cin>>ExistenciaFisicas;
                 cout<<"Escriba el nivel de reorder del producto: ";
                 cin>>NivelDeReorden;     //escritura en el archiv
-        reinterpret_cast < char * > ( & indice), sizeof(indice);
-      ArchivoInventario.write(NombreProducto, 80);
-      ArchivoInventario.write(
-        reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
-      ArchivoInventario.write(
-        reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
-      ArchivoInventario.write(
-        reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
-      ArchivoInventario.write(
-        reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
+                ArchivoInventario.write( reinterpret_cast < char * > ( & indice), sizeof(indice));
+                ArchivoInventario.write(NombreProducto, 80);
+                ArchivoInventario.write(reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+                ArchivoInventario.write(reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+                ArchivoInventario.write(reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+                ArchivoInventario.write( reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
             }
         }while(indice!=0);
     }
@@ -167,7 +163,7 @@ void Lectura() { // Lectura del archivo binario previamente creado
     if (!ArchivoInventario)
       cout << "Error en la apertura del archivo";
     else {
-     cout << left << setw(8) << "Indice" << setw(20) << "Nombre del Producto" << setw(10) << "Precio de Compra" << setw(10) << "Precio de venta" << setw(10) << "Existencias" << setw(10) << "Nivel de Reorden" << endl;
+     cout << left << setw(8) <<setprecision(8)<< "Indice" << setw(22)<<setprecision(22) << "Nombre del Producto " << setw(15)<<setprecision(15) << "Precio de Compra  " << setw(10)<<setprecision(10)<< " Precio de venta  " << setw(17)<<setprecision(17) << " Existencias " << setw(9)<<setprecision(9) <<"Nivel de Reorden " << endl;
       ArchivoInventario.read(
         reinterpret_cast < char * > ( & indice), sizeof(indice));
       ArchivoInventario.read(NombreProducto, 80);
@@ -181,6 +177,7 @@ void Lectura() { // Lectura del archivo binario previamente creado
         reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
       //Primera lectura del programa y creacion de los datos a listas
       nuevo = new(nodo);
+      nuevo -> ind = indice;
       strcpy(nuevo -> producto, NombreProducto); //Conversion del chart a String
       nuevo -> pc = PrecioDeCompra;
       nuevo -> pv = PrecioDeVenta;
@@ -192,7 +189,6 @@ void Lectura() { // Lectura del archivo binario previamente creado
      
       //Segunda lectura del archivo binario
       while (ArchivoInventario.eof() == false){
-      cout << left << setw(8) << "Indice" << setw(20) << "Nombre del Producto" << setw(10) << "Precio de Compra" << setw(10) << "Precio de venta" << setw(10) << "Existencias" << setw(10) << "Numero de Reorden" << endl;
       ArchivoInventario.read(
         reinterpret_cast < char * > ( & indice), sizeof(indice));
       ArchivoInventario.read(NombreProducto, 80);
@@ -205,6 +201,7 @@ void Lectura() { // Lectura del archivo binario previamente creado
       ArchivoInventario.read(
         reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
 nuevo = new(nodo);
+      nuevo -> ind = indice;
       strcpy(nuevo -> producto, NombreProducto); //Conversion del chart a String
       nuevo -> pc = PrecioDeCompra;
       nuevo -> pv = PrecioDeVenta;
@@ -213,7 +210,6 @@ nuevo = new(nodo);
       nuevo -> siguiente = NULL;
       fin -> siguiente = nuevo;
       fin = nuevo;
-    
       }
       //Borrado del ultimo nodo porque no tiene informacion y no tiene informacion. 
       ptr = inicio;
@@ -223,10 +219,10 @@ nuevo = new(nodo);
       fin=ptr;
       fin->siguiente=NULL;
        // Aqui se desplega la lista con los valores previamente agregados. 
-      cout << left << setw(8) << "Indice" << setw(20) << "Nombre del Producto" << setw(10) << "Precio de Compra" << setw(10) << "Precio de venta" << setw(10) << "Existencias" << setw(10) << "Numero de Reorden" << endl;
       ptr =inicio;
       while(ptr!=NULL){
-        cout<<ptr->producto<<setw(8)<< ptr->pc<<setw(8)<< ptr->pv<<setw(8)<<endl;
+        cout<< setfill('-');
+        cout << left << setw(8)<<setprecision(8)<<ptr->ind<<setw(22)<<setprecision(22)<<ptr->producto<<setw(22)<<setprecision(22)<< ptr->pc<< setw(18)<<setprecision(18)<< ptr->pv<<setw(19)<<setprecision(19)<<ptr->exi<< setw(16)<<setprecision(16)<<ptr->nvlr<<endl;
         ptr=ptr->siguiente;
       
       }
