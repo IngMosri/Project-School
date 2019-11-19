@@ -1,12 +1,19 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <cstring>
 #include <iomanip>
+#include <cstdio>
 
 using namespace std;
 //Variables Globales
 int total = 0;
+
+struct Nuevo_Usuario {
+string Usuario_Nuevo;
+    int password;
+    };
+    Nuevo_Usuario Cuenta_usuarios[100];
+
 struct nodo {
   int ind;
   char producto[80];
@@ -17,6 +24,7 @@ struct nodo {
   nodo * siguiente;
   nodo * anterior;
 };
+
 nodo * ptr = NULL;
 nodo * inicio = NULL;
 nodo * fin = NULL;
@@ -26,6 +34,8 @@ void Administrador();
 void Ventas();
 void Escritura();
 void Lectura();
+void Alta_usuario();
+void Borrar_datos();
 int main() {
   //menu
 
@@ -91,6 +101,8 @@ void Administrador() {
     cout << "1 Alta de producto\n";
     cout << "2  Mostar Producto" << '\n';
     cout << "3  Ventas" << '\n';
+    cout << "4.  Alta de nuevos usuarios \n";
+    cout << "5. Dar producto de baja \n";
     cin >> opcion;
     switch (opcion) {
     case 1:
@@ -102,7 +114,13 @@ void Administrador() {
     case 3:
       Ventas();
       break;
-    default:
+    case 4:
+    Alta_usuario();
+      break;
+    case 5:    
+    Borrar_datos();
+      break;
+        default:  
       cout << "opcion invalida";
     }
   } while (opcion != 8);
@@ -186,7 +204,7 @@ void Lectura() { // Lectura del archivo binario previamente creado
       nuevo -> siguiente = NULL;
       inicio=nuevo;
       fin=nuevo;
-     
+
       //Segunda lectura del archivo binario
       while (ArchivoInventario.eof() == false){
       ArchivoInventario.read(
@@ -211,21 +229,113 @@ nuevo = new(nodo);
       fin -> siguiente = nuevo;
       fin = nuevo;
       }
-      //Borrado del ultimo nodo porque no tiene informacion y no tiene informacion. 
+      //Borrado del ultimo nodo porque no tiene informacion y no tiene informacion.
       ptr = inicio;
       while(ptr->siguiente !=fin)
         ptr=ptr->siguiente;
       delete(fin);
       fin=ptr;
       fin->siguiente=NULL;
-       // Aqui se desplega la lista con los valores previamente agregados. 
+       // Aqui se desplega la lista con los valores previamente agregados.
       ptr =inicio;
       while(ptr!=NULL){
         cout<< setfill('-');
         cout << left << setw(8)<<setprecision(8)<<ptr->ind<<setw(22)<<setprecision(22)<<ptr->producto<<setw(22)<<setprecision(22)<< ptr->pc<< setw(18)<<setprecision(18)<< ptr->pv<<setw(19)<<setprecision(19)<<ptr->exi<< setw(16)<<setprecision(16)<<ptr->nvlr<<endl;
         ptr=ptr->siguiente;
-      
+
       }
 ArchivoInventario.close();
     }
   }
+
+void Alta_usuario(){
+
+
+string usuario_temp;
+    int i =0;
+    while(true){
+        cout<<"Nombre: ";
+        cin>>usuario_temp;
+        if(usuario_temp=="*")
+            break;
+            Cuenta_usuarios[i].Usuario_Nuevo=usuario_temp;
+            cout<<"Ingrese su Password(Solamente con numeros y no mas de 4 digitos ): ";
+            cin>>Cuenta_usuarios[i].password;
+            i++;
+
+    }
+}
+void Borrar_datos()
+{
+
+  int pos, flag = 0; 
+  int indice;
+  char NombreProducto[80];
+  int PrecioDeCompra;
+  int PrecioDeVenta;
+  int ExistenciaFisicas;
+  int NivelDeReorden;
+	cout<<"Enter Position that should be Deleted :";
+  cin>>pos; 
+	ofstream o("temp.bin", ios:: app | ios::binary | ios::out);
+  ifstream ifs("inventario1.bin", ios::binary | ios::in);
+  
+
+	if(!ifs)
+	{
+		cout<<"File not Found";
+		exit(0);
+	}
+
+	else
+	{
+     while (!ifs.eof()) 
+     {
+          ifs.read(
+            reinterpret_cast < char * > ( & indice), sizeof(indice));
+          ifs.read(NombreProducto, 80);
+          ifs.read(
+            reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+          ifs.read(
+            reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+          ifs.read(
+            reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+          ifs.read(
+            reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
+        
+        //Es el que quieres borrar
+        if(indice == pos)
+        {
+            flag = 1;
+        }
+        //Si no es el que quieres borrar
+        else
+        {
+            o.write( reinterpret_cast < char * > ( & indice), sizeof(indice));
+            o.write(NombreProducto, 80);
+            o.write(reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+            o.write(reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+            o.write(reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+            o.write( reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
+        }
+     }
+     o.close();
+     ifs.close();
+     remove("inventario1.bin");
+
+     rename("temp.bin", "inventario1.bin"); 
+
+     if (flag == 1) 
+        cout << "\nrecord successfully deleted \n"; 
+    else
+        cout << "\nrecord not found \n";
+  }
+}		
+
+
+
+
+
+
+
+
