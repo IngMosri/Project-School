@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -12,7 +13,6 @@ string contrasenas[100];
 int TotalUsuarios =0;
 //Estructura de datos
 struct producto_nodo {
-  int ind;
   string producto;
   int pc;
   int pv;
@@ -35,13 +35,16 @@ producto_nodo* lprt = NULL;
 producto_nodo * inicio = NULL;
 producto_nodo * fin = NULL;
 producto_nodo * nuevo = NULL;
+
+producto_nodo * inventario = NULL;
+
 struct existencia_prod{
   bool producto_existencias;
   int producto_posicion;
 };
 
-int i, total;
-producto_nodo inventario[100];
+int i, total = 0;
+//producto_nodo inventario[100];
 float total_ventas, total_total;
 
 //Funciones
@@ -50,7 +53,6 @@ void Ventas();
 void Altas();
 void Escritura();
 void Lectura();
-void Ordenar();
 //Apartado sobre altas,bajas,muestra y modificaciones de usuarios
 void Alta_Usuario();
 void Baja_Usuario();
@@ -59,17 +61,19 @@ void Consulta_De_Usario();
 void Modicacion_De_Usuario();
 void guardar_inventario();
 int buscar_usuario(string BuscarUsuarios);
-existencia_prod buscar(string);
+int buscar(string);
 void Modificacion_De_Usuario_Registrado(int modUs);
 void Modificacion_De_Contrasena_Registrado(int modUs);
 void Regresar_Al_Menu_Anterior();
 //Funcion de eliminar datos del ArchivoInventario binario
 void Borrar_datos();
+void cargar_inventario();
+
 
 int main() {
   //menu
   int opcion = 0;
-
+  cargar_inventario();
   {
     cout << "menu\n";
     cout << "1 Administrador\n";
@@ -143,13 +147,10 @@ void Administrador() {
       Lectura();
       break;
       case 3:
-    guardar_inventario();
+      Escritura();
       break;
-    case 5:
-      Ordenar();
-        break;
     case 6:
-    Escritura();
+    Borrar_datos();
       break;
     case 7:
     Administrador_De_Cuentas_De_Usuario();
@@ -165,109 +166,8 @@ void Administrador() {
     }
   } while (opcion != 8);
 }
-
-void Altas(){
-  // Declaracion de variables
-int i;
-existencia_prod producto_alta;
-string producto_referencia;
-i = total;
-
-do{
-    cout<< "Ingresa el producto que se quiere dar de alta"<< endl;
-    cin>>producto_referencia;
-    if( producto_referencia != "*"){
-        producto_alta = buscar(producto_referencia);
-
-        int j = producto_alta.producto_posicion;
-        if(producto_alta.producto_existencias == false){
-
-            cout<< "Ingrese el ID del producto apartir de 5"<<endl;
-            cin >>inventario[i].ind;
-
-            inventario[i].producto = producto_referencia;
-
-            cout<<"ingrese el precio de compra"<<endl;
-            cin>>inventario[i].pc;
-
-            cout<<"ingrese el precio de venta"<<endl;
-            cin>>inventario[i].pv;
-            while (inventario[i].pv<inventario[i].pc)
-            {
-                cout<< "Precio de venta es menor que precio de compra vuelva a capturar los valores correctos"<<endl;
-                cin>> inventario[i].pv;
-            }
-
-            cout<< "ingrese las existencias"<<endl;
-            cin>>inventario[i].exi;
-
-            cout<< "ingrese el nivel de reorder"<<endl;
-            cin>>inventario[i].nvlr;
-            while (inventario[i].exi<inventario[i].nvlr)
-          {
-            cout<< "Nivel de reorder es mayor que las exitencia vuelva a capturar"<<endl;
-            cin>>inventario[i].nvlr;
-          }
-
-            i++;
-        }else
-              cout<<"producto ya ha sido dado de alta"<<endl;
-      }
-      }while (producto_referencia != "*");
-
-        total = i;
-
-
-}
-
-//Apartado de escritura y alta de nuevos ArchivoInventarios en el inventario
-void Escritura() {
-  ofstream ArchivoInventario("inventario1.bin", ios:: app | ios::binary);
-int indice;
-    char NombreProducto[80];
-    int PrecioDeCompra;
-    int PrecioDeVenta;
-    int ExistenciaFisicas;
-    int NivelDeReorden;
-    if (!ArchivoInventario)
-    cout<<"Error en la apertura del ArchivoInventario";
-    else{
-        do{
-            cout<<"Escriba el indice del poducto(0 para salir debe empezar en # 5 en adelante)  ";
-            cin>>indice;
-            if(indice!=0){
-
-                cout<<"Escriba el nombre del prodcuto que quiere dar de alta : ";
-                cin>>NombreProducto;
-                fflush(stdin);//vac�a el bufer de lectura
-                cout<<"Escriba el precio de compra: ";
-                cin>>PrecioDeCompra;
-                cout<<"Escriba el precio de venta: ";
-                cin>>PrecioDeVenta;
-                cout<<"Escriba las existencias fisicas del producto: ";
-                cin>>ExistenciaFisicas;
-                cout<<"Escriba el nivel de reorder del producto: ";
-                cin>>NivelDeReorden;
-
-                   //escritura en el ArchivoInventario
-                ArchivoInventario.write( reinterpret_cast < char * > ( & indice), sizeof(indice));
-                ArchivoInventario.write(NombreProducto, 80);
-                ArchivoInventario.write(reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
-                ArchivoInventario.write(reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
-                ArchivoInventario.write(reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
-                ArchivoInventario.write( reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
-            }
-        }while(indice!=0);
-    }
-    ArchivoInventario.close();
-
-}
-
-
-
-//Apartado de lectura de los ArchivoInventarios
-void Lectura() { // Lectura del ArchivoInventario binario previamente creado
-    ifstream ArchivoInventario("inventario1.bin", ios:: in | ios::binary);
+void cargar_inventario(){
+  ifstream ArchivoInventario("inventario1.bin", ios:: in | ios::binary);
     //Variables locales
 
     int indice;
@@ -279,10 +179,6 @@ void Lectura() { // Lectura del ArchivoInventario binario previamente creado
     if (!ArchivoInventario)
       cout << "Error en la apertura del ArchivoInventario";
     else {
-     cout << left << setw(8) <<setprecision(8)<< "Indice" << setw(22)<<setprecision(22) << "Nombre del Producto " << setw(15)<<setprecision(15) << "Precio de Compra  " << setw(10)<<setprecision(10)<< " Precio de venta  " << setw(17)<<setprecision(17) << " Existencias " << setw(9)<<setprecision(9) <<"Nivel de Reorden " << endl;
-
-      ArchivoInventario.read(
-        reinterpret_cast < char * > ( & indice), sizeof(indice));
       ArchivoInventario.read(NombreProducto, 80);
       ArchivoInventario.read(
         reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
@@ -296,7 +192,6 @@ void Lectura() { // Lectura del ArchivoInventario binario previamente creado
 
       //Primera lectura del programa y creacion de los datos a listas
       nuevo = new(producto_nodo);
-      nuevo -> ind = indice;
       (nuevo ->producto = NombreProducto); //Conversion del chart a String
       nuevo -> pc = PrecioDeCompra;
       nuevo -> pv = PrecioDeVenta;
@@ -305,10 +200,9 @@ void Lectura() { // Lectura del ArchivoInventario binario previamente creado
       nuevo -> siguiente = NULL;
       inicio=nuevo;
       fin=nuevo;
+      inventario = nuevo;
       //Segunda lectura del ArchivoInventario binario
       while (ArchivoInventario.eof() == false){
-      ArchivoInventario.read(
-        reinterpret_cast < char * > ( & indice), sizeof(indice));
       ArchivoInventario.read(NombreProducto, 80);
       ArchivoInventario.read(
         reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
@@ -320,7 +214,6 @@ void Lectura() { // Lectura del ArchivoInventario binario previamente creado
         reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
 
       nuevo = new(producto_nodo);
-      nuevo -> ind = indice;
       nuevo -> producto = NombreProducto; //Conversion del chart a String
       nuevo -> pc = PrecioDeCompra;
       nuevo -> pv = PrecioDeVenta;
@@ -339,10 +232,186 @@ void Lectura() { // Lectura del ArchivoInventario binario previamente creado
       fin->siguiente=NULL;
        // Aqui se desplega la lista con los valores previamente agregados.
       ptr =inicio;
+      ArchivoInventario.close();
+    }
+
+}
+void Altas(){
+  // Declaracion de variables
+int i;
+existencia_prod producto_alta;
+int posProducto;
+string producto_referencia;
+i = total;
+
+do{
+    cout<< "Ingresa el producto que se quiere dar de alta"<< endl;
+    cin>>producto_referencia;
+    if( producto_referencia != "*"){
+        posProducto = buscar(producto_referencia);
+        if(posProducto == -1){
+            nuevo = new(producto_nodo);
+
+            nuevo ->producto =producto_referencia;
+
+            cout<<"ingrese el precio de compra"<<endl;
+            cin>>nuevo->pc;
+
+            cout<<"ingrese el precio de venta"<<endl;
+            cin>>nuevo ->pv;
+            while (nuevo ->pv<inventario->pc)
+            {
+                cout<< "Precio de venta es menor que precio de compra vuelva a capturar los valores correctos"<<endl;
+                cin>> nuevo->pv;
+            }
+
+            cout<< "ingrese las existencias"<<endl;
+            cin>>nuevo ->exi;
+
+            cout<< "ingrese el nivel de reorder"<<endl;
+            cin>>nuevo ->nvlr;
+            while (nuevo -> exi < nuevo-> nvlr)
+          {
+            cout<< "Nivel de reorder es mayor que las exitencia vuelva a capturar"<<endl;
+            cin>>nuevo -> nvlr;
+          }
+            ptr = fin;
+            fin -> siguiente = nuevo;
+            fin = nuevo;
+            fin ->siguiente =NULL;
+            fin->anterior = ptr;
+            i++;
+        }else
+              cout<<"producto ya ha sido dado de alta"<<endl;
+      }
+      }while (producto_referencia != "*");
+
+        total++;
+
+}
+
+//Apartado de escritura y alta de nuevos ArchivoInventarios en el inventario
+void Escritura() {
+  ofstream ArchivoInventario("inventario1.bin",ios::out | ios::binary);
+
+  char inv[80];
+  int i = 0;
+  int PrecioDeCompra;
+  int PrecioDeVenta;
+  int ExistenciaFisicas;
+  int NumeroDeReorden;
+
+  ptr = inventario;
+
+  if (!ArchivoInventario) cout << "Error en la apertura del Archivo";
+  else {
+      do {
+          if (ptr != NULL ) {
+              PrecioDeCompra = ptr -> pc;
+              PrecioDeVenta = ptr -> pv;
+              ExistenciaFisicas = ptr ->exi;
+              NumeroDeReorden = ptr -> nvlr;
+
+              fflush(stdin); // vacia el buffer de la lectura
+              //escritura en el ArchivoInventario
+              strcpy(inv, ptr -> producto.c_str());
+              //ArchivoInventario.write(reinterpret_cast < char * > ( & ptr -> producto), sizeof(ptr -> producto));
+             ArchivoInventario.write(inv,80);
+             ArchivoInventario.write(
+              reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+            ArchivoInventario.write(
+              reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+            ArchivoInventario.write(
+              reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+            ArchivoInventario.write(
+              reinterpret_cast < char * > ( & NumeroDeReorden), sizeof(NumeroDeReorden));
+                  ptr  = ptr->siguiente;
+
+          }
+      } while (ptr != NULL);
+  }
+
+
+  ArchivoInventario.close();
+
+  cout << "Se guardo el inventario" << endl;
+
+}
+
+
+//Apartado de lectura de los ArchivoInventarios
+void Lectura() { // Lectura del ArchivoInventario binario previamente creado
+    ifstream ArchivoInventario("inventario1.bin", ios:: in | ios::binary);
+    //Variables locales
+    int indice;
+    char NombreProducto[80];
+    int PrecioDeCompra;
+    int PrecioDeVenta;
+    int ExistenciaFisicas;
+    int NivelDeReorden;
+    if (!ArchivoInventario)
+        cout << "Error en la apertura del ArchivoInventario";
+    else {
+          cout << left <<setw(22)<<setprecision(22) << "Nombre del Producto " << setw(15)<<setprecision(15) << "Precio de Compra  " << setw(10)<<setprecision(10)<< " Precio de venta  " << setw(17)<<setprecision(17) << " Existencias " << setw(9)<<setprecision(9) <<"Nivel de Reorden " << endl;
+
+      ArchivoInventario.read(NombreProducto, 80);
+      ArchivoInventario.read(
+        reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+      ArchivoInventario.read(
+        reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+      ArchivoInventario.read(
+        reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+      ArchivoInventario.read(
+        reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
+        string str(NombreProducto);
+
+      //Primera lectura del programa y creacion de los datos a listas
+      nuevo = new(producto_nodo);
+      (nuevo ->producto = NombreProducto); //Conversion del chart a String
+      nuevo -> pc = PrecioDeCompra;
+      nuevo -> pv = PrecioDeVenta;
+      nuevo -> exi = ExistenciaFisicas;
+      nuevo -> nvlr = NivelDeReorden;
+      nuevo -> siguiente = NULL;
+      inicio=nuevo;
+      fin=nuevo;
+      inventario = nuevo;
+      //Segunda lectura del ArchivoInventario binario
+      while (ArchivoInventario.eof() == false){
+              ArchivoInventario.read(NombreProducto, 80);
+              ArchivoInventario.read(
+                reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
+              ArchivoInventario.read(
+                reinterpret_cast <char *> ( & PrecioDeVenta), sizeof(PrecioDeVenta));
+              ArchivoInventario.read(
+                reinterpret_cast < char * > ( & ExistenciaFisicas), sizeof(ExistenciaFisicas));
+              ArchivoInventario.read(
+                reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
+
+      nuevo = new(producto_nodo);
+      nuevo -> producto = NombreProducto; //Conversion del chart a String
+      nuevo -> pc = PrecioDeCompra;
+      nuevo -> pv = PrecioDeVenta;
+      nuevo -> exi = ExistenciaFisicas;
+      nuevo -> nvlr = NivelDeReorden;
+      nuevo -> siguiente = NULL;
+      fin -> siguiente = nuevo;
+      fin = nuevo;
+      }
+      //Borrado del ultimo nodo porque no tiene informacion
+      ptr = inicio;
+      while(ptr->siguiente !=fin)
+             ptr=ptr->siguiente;
+      delete(fin);
+            fin=ptr;
+            fin->siguiente=NULL;
+       // Aqui se desplega la lista con los valores previamente agregados.
+      ptr =inicio;
+
       while(ptr!=NULL){
-        cout<< setfill('-');
-        cout << left << setw(8)<<setprecision(8)<<ptr->ind<<setw(22)<<setprecision(22)<<ptr->producto<<setw(22)<<setprecision(22)<< ptr->pc<< setw(18)<<setprecision(18)<< ptr->pv<<setw(19)<<setprecision(19)<<ptr->exi<< setw(16)<<setprecision(16)<<ptr->nvlr<<endl;
-        ptr=ptr->siguiente;
+            cout<< setfill('-');
+            cout << left <<setw(22)<<setprecision(22)<<ptr->producto<<setw(22)<<setprecision(22)<< ptr->pc<< setw(18)<<setprecision(18)<< ptr->pv<<setw(19)<<setprecision(19)<<ptr->exi<< setw(16)<<setprecision(16)<<ptr->nvlr<<endl;
+            ptr=ptr->siguiente;
 
       }
 ArchivoInventario.close();
@@ -354,14 +423,16 @@ ArchivoInventario.close();
 void Borrar_datos()
 {
 //variables
-  int pos, flag = 0;
+  string pos;
+  int flag = 0;
   int indice;
   char NombreProducto[80];
   int PrecioDeCompra;
   int PrecioDeVenta;
   int ExistenciaFisicas;
   int NivelDeReorden;
-	cout<<"Ingrese la posicion del indice que desea eliminar del inventario :";
+  
+	cout<<"Ingrese el producto que desea eliminar del inventario :";
   cin>>pos;
   //Crea un ArchivoInventario temporal y lee el previamente ya hecho
 	ofstream o("temp.bin", ios:: app | ios::binary | ios::out);
@@ -378,8 +449,7 @@ void Borrar_datos()
 	{
      while (!ifs.eof())
      {
-          ifs.read(
-            reinterpret_cast < char * > ( & indice), sizeof(indice));
+          
           ifs.read(NombreProducto, 80);
           ifs.read(
             reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
@@ -391,14 +461,13 @@ void Borrar_datos()
             reinterpret_cast < char * > ( & NivelDeReorden), sizeof(NivelDeReorden));
 
         //Es el que quieres borrar
-        if(indice == pos)
+        if(NombreProducto == pos)
         {
             flag = 1;
         }
         //Si no es el que quieres borrar
         else
         {
-            o.write( reinterpret_cast < char * > ( & indice), sizeof(indice));
             o.write(NombreProducto, 80);
             o.write(reinterpret_cast < char * > ( & PrecioDeCompra), sizeof(PrecioDeCompra));
             o.write(reinterpret_cast < char * > ( & PrecioDeVenta), sizeof(PrecioDeVenta));
@@ -464,11 +533,11 @@ void Alta_Usuario(/* arguments */) {
 
         if (usuario == "*")
             break;
-        cout << "Ingrese contrasena";
-        cin >> contrasena;
+            cout << "Ingrese contrasena";
+            cin >> contrasena;
 
-        usuarios[TotalUsuarios] = usuario;
-        contrasenas[TotalUsuarios] = contrasena;
+            usuarios[TotalUsuarios] = usuario;
+            contrasenas[TotalUsuarios] = contrasena;
 
         i++;
         TotalUsuarios=i;
@@ -572,114 +641,33 @@ void Regresar_Al_Menu_Anterior(){
 
 
 
-void Ordenar(){
-  int opcion = 0; //variable local
-    cout << "Tecle el # 1 para ordenar por ID\n";
-    cin >> opcion;
-    switch (opcion) {
-      case 1:
-        int swapped;
-        /* Checking for empty list */
-        if (inicio == NULL)
-          break;
-        do
-        {
-          swapped = 0;
-          ptr1 = inicio;
-          while (ptr1->siguiente != lprt)
-          {
-            cout << ptr1->ind << " "<< ptr1->siguiente->ind<<endl;
-            if (ptr1->ind > ptr1->siguiente->ind)
-            {
-              swap(ptr1->ind, ptr1->siguiente->ind);
-              swapped = 1;
-              cout << ptr1->ind << " "<< ptr1->siguiente->ind<<endl;
-            }
-            ptr1 = ptr1->siguiente;
-          }
-          lprt = ptr1;
-        }while(swapped);
-         ptr1 = inicio;
-        for(int i = 0; i<4; i++){
-            cout<< ptr1->ind<<endl;
-            ptr1 = ptr1->siguiente;
-        }
 
-        break;
-    }
-
-}
-existencia_prod buscar(string producto_referencia){
-
-
- existencia_prod producto_encontrado;
+int buscar(string producto_referencia){
+ producto_nodo *ptr = inventario;
   int i = 0;
-  do{
-
-     if(producto_referencia == inventario[i].producto){
-       producto_encontrado.producto_posicion = i;
-       producto_encontrado.producto_existencias = true;
-       return producto_encontrado;
+  while (ptr != NULL)
+  {
+     if(producto_referencia == ptr->producto){
+       return i;
       }else
-
+      {
+       ptr = ptr->siguiente;
        i++;
-
-     }while( i <=total);
-     producto_encontrado.producto_existencias = false;
-     return producto_encontrado;
-
-
-}
-
-
-void guardar_inventario(){
-    ofstream ArchivoInventario("inventario1.bin", ios::out | ios::binary);
- 
-
-        char upload_inv[100];
-        int i = 0;
-
-        if (!ArchivoInventario) cout << "Error en la apertura del Archivo";
-
-        else {
-            do {
-                if (inventario[i].ind ==NULL ) {
-                    fflush(stdin); // vacia el buffer de la lectura
-                    //escritura en el ArchivoInventario
-                    ArchivoInventario.write( reinterpret_cast < char * > ( & inventario[i].ind), sizeof(inventario[i].ind));
-                    ArchivoInventario.write( reinterpret_cast < char * > ( & inventario[i].producto), sizeof(inventario[i].producto));
-                    ArchivoInventario.write(reinterpret_cast < char * > ( & inventario[i].pc), sizeof(inventario[i].pc));
-                    ArchivoInventario.write(reinterpret_cast < char * > ( & inventario[i].pv), sizeof(inventario[i].pv));
-                    ArchivoInventario.write(reinterpret_cast < char * > ( & inventario[i].exi), sizeof(inventario[i].exi));
-                    ArchivoInventario.write( reinterpret_cast < char * > ( &inventario[i].nvlr), sizeof(inventario[i].nvlr));
-
-
-
-                    i++;
-
-                } else
-                    i++;
-
-            } while (i <= total);
-        }
-
-
-        ArchivoInventario.close();
-
-        cout << "Se guardo el inventario" << endl;
-
-
+      }
+  }
+     return -1;
 }
 
 void Ventas(){
 
     string producto_compra;
-    existencia_prod producto_venta;
-    int cantidad_vendida, i, resultado_compra, j;
+    int cantidad_vendida, i, resultado_compra, numero_producto, j;
     float total;
 
     j =0;
     total =0;
+    ptr = inventario;
+
 
     informacion_ticket_info ticket_info[100];
 
@@ -689,35 +677,40 @@ void Ventas(){
 	        cin >> producto_compra;
 
 	        if (producto_compra != "*" ) {
-	            producto_venta = buscar(producto_compra);
-	            i = producto_venta.producto_posicion;
+	         numero_producto = buscar(producto_compra);
+           if( numero_producto != -1)
+           {
+             for(i = 0;i<numero_producto;i++)
+             {
+              ptr = ptr -> siguiente;
+             }
 
-	            if (producto_venta.producto_existencias) {
+	            if (producto_compra == producto_compra) {
 
 	                cout << "Cantidad: ";
 	                cin >> cantidad_vendida;
 
-                        if(inventario[i].exi == 0 ){
+                        if(ptr ->exi == 0 ){
                             cout << "Producto agotado " << endl;
                         }
-	                else if (cantidad_vendida > inventario[i].exi) {
+	                else if (cantidad_vendida > ptr ->exi ) {
 
 	                    cout << "La cantidad solicitada excede el número de existencias" << endl;
 
-	                    cout << "Desea comprar: " << inventario[i].exi<< " ? \n 1. Sí \n 2.No \n";
+	                    cout << "Desea comprar: " << ptr ->exi << " ? \n 1. Sí \n 2.No \n";
 	                    cin >> resultado_compra;
 
 	                    if (resultado_compra == 1) {
-	                        cantidad_vendida = inventario[i].exi;
-                                inventario[i].exi =0;
+	                        cantidad_vendida = ptr ->exi;
+                                ptr ->exi =0;
 
-	                        ticket_info[j].cantidad_vendida= cantidad_vendida;
-	                        ticket_info[j].producto_vendido= inventario[i].producto;
-	                        ticket_info[j].precio_unitario = inventario[i].pv;
+	                        ticket_info[j].cantidad_vendida = cantidad_vendida;
+	                        ticket_info[j].producto_vendido = ptr ->producto;
+	                        ticket_info[j].precio_unitario = ptr ->pv;
 	                        ticket_info[j].subtotal_venta = ticket_info[j].precio_unitario*ticket_info[j].cantidad_vendida;
 	                        total += ticket_info[j].subtotal_venta;
 
-                                cout << "Producto" << inventario[i].producto<< " agotado" << endl;
+                                cout << "Producto" << ptr ->producto<< " agotado" << endl;
 
 	                        j++;
 
@@ -725,13 +718,13 @@ void Ventas(){
 					}else {
 
 			                ticket_info[j].cantidad_vendida = cantidad_vendida;
-                                        inventario[i].exi -= cantidad_vendida;
-			                ticket_info[j].producto_vendido = inventario[i].producto;
-			                ticket_info[j].precio_unitario = inventario[i].pv;
+                                        ptr-> exi -= cantidad_vendida;
+			                ticket_info[j].producto_vendido = ptr ->producto;
+			                ticket_info[j].precio_unitario = ptr ->pv;
 			                ticket_info[j].subtotal_venta = ticket_info[j].precio_unitario  * ticket_info[j].cantidad_vendida;
 			                total += ticket_info[j].subtotal_venta;
 
-                                        if (inventario[i].exi <= inventario[i].nvlr){
+                                        if (ptr ->exi <= ptr ->nvlr){
                                             cout << "Ordenar " << inventario[i].producto<< endl;
                                         }
 			                j++;
@@ -739,14 +732,15 @@ void Ventas(){
 				}else
 	                cout << "El producto no existe" << endl;
 	    	}
+          }
 
 	    }while( producto_compra != "*" );
 
 					total_ventas += total;
 
 
-				    cout << setw(20) <<  "ticket_info"<< endl;
-				    cout << "Cantidad: " << setw(10)<< " Producto: " << setw(10) << " PU: " << setw(10)  << " Sub: "<< endl;
+				    cout << setw(20) <<  "Informacion de la Venta realizada "<< endl;
+				    cout << "Cantidad: " << setw(10)<< "Producto: " << setw(10) << " Precio: " << setw(10)  << " Total: "<< endl;
 
 				    for (int k=0; k<j; k++){
 
@@ -755,7 +749,7 @@ void Ventas(){
 					}
 				    cout << "" << endl;
 				    cout << "" << endl;
-				    cout << setw(30) <<"Total: " << total << endl;
+				    cout << setw(30) <<"Total vendido es: " << total << endl;
 
 				    j=0;
 
