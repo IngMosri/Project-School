@@ -14,6 +14,7 @@ int TotalUsuarios =0;
 //Estructura de datos
 struct producto_nodo {
   string producto;
+  int ind;
   int pc;
   int pv;
   int exi;
@@ -29,23 +30,19 @@ struct informacion_ticket_info{
   float subtotal_venta;
 };
 
+producto_nodo * inventario = NULL;
 producto_nodo * ptr = NULL;
 producto_nodo * ptr1 = NULL;
-producto_nodo* lprt = NULL;
+producto_nodo * lprt = NULL;
 producto_nodo * inicio = NULL;
 producto_nodo * fin = NULL;
 producto_nodo * nuevo = NULL;
 
-producto_nodo * inventario = NULL;
-
-struct existencia_prod{
-  bool producto_existencias;
-  int producto_posicion;
-};
+    
 
 int i, total = 0;
-//producto_nodo inventario[100];
 float total_ventas, total_total;
+string UsuarioVenta[100];
 
 //Funciones
 void Administrador();
@@ -53,6 +50,7 @@ void Ventas();
 void Altas();
 void Escritura();
 void Lectura();
+void Ordenar();
 //Apartado sobre altas,bajas,muestra y modificaciones de usuarios
 void Alta_Usuario();
 void Baja_Usuario();
@@ -62,6 +60,7 @@ void Modicacion_De_Usuario();
 void guardar_inventario();
 int buscar_usuario(string BuscarUsuarios);
 int buscar(string);
+void modificaciones();
 void Modificacion_De_Usuario_Registrado(int modUs);
 void Modificacion_De_Contrasena_Registrado(int modUs);
 void Regresar_Al_Menu_Anterior();
@@ -134,10 +133,11 @@ void Administrador() {
     cout << "1. Alta de producto\n";
     cout << "2. Mostar Producto\n";
     cout << "3.Guardar inventario\n";
-    cout << "4.Subir inventario\n";
-    cout << "5. Adminstracion de cuentas de usuario\n";
-    cout << "6. Dar producto de baja \n";
-    cout << "7. Regresar al Menu Anterior \n";
+    cout << "4. Dar producto de baja \n";
+    cout << "5 .Ordenar Productos\n";
+    cout << "6. Modificaciones \n";
+    cout << "7. Adminstracion de cuentas de usuario\n";
+    cout << "8. Regresar al Menu Anterior \n";
     cin >> opcion;
     switch (opcion) {
     case 1:
@@ -149,16 +149,19 @@ void Administrador() {
       case 3:
       Escritura();
       break;
-    case 6:
+    case 4:
     Borrar_datos();
+      break;
+    case 5:
+      Ordenar();
+      break;
+    case 6:
+    modificaciones();
       break;
     case 7:
-    Administrador_De_Cuentas_De_Usuario();
+     Administrador_De_Cuentas_De_Usuario();
       break;
     case 8:
-    Borrar_datos();
-      break;
-    case 9:
     Regresar_Al_Menu_Anterior();
       break;
 
@@ -239,7 +242,6 @@ void cargar_inventario(){
 void Altas(){
   // Declaracion de variables
 int i;
-existencia_prod producto_alta;
 int posProducto;
 string producto_referencia;
 i = total;
@@ -290,6 +292,36 @@ do{
 
 }
 
+void Ordenar() {
+  int opcion = 0; //variable local
+  cout << "Tecle el # 1 para ordenar por ID\n";
+  cin >> opcion;
+  switch (opcion) {
+  case 1:
+    int swapped;
+    /* Checking for empty list */
+    if (inicio == NULL)
+      break;
+    do {
+      swapped = 0;
+      ptr1 = inicio;
+      while (ptr1 -> siguiente != lprt) {
+          
+        if (ptr1 -> ind > ptr1 -> siguiente -> ind) {
+            swap(ptr1 -> ind, ptr1 -> siguiente -> ind);
+            swapped = 1;
+            cout << ptr1 -> ind << " " << ptr1 -> siguiente -> ind << endl;
+          }
+      lprt = ptr1;
+      } 
+    }while (swapped);
+    ptr1 = inicio;
+        for (int i = 0; i < 4; i++) {
+      cout << ptr1 -> ind << endl;
+      ptr1 = ptr1 -> siguiente;
+        }
+    }
+}
 //Apartado de escritura y alta de nuevos ArchivoInventarios en el inventario
 void Escritura() {
   ofstream ArchivoInventario("inventario1.bin",ios::out | ios::binary);
@@ -663,10 +695,26 @@ void Ventas(){
     string producto_compra;
     int cantidad_vendida, i, resultado_compra, numero_producto, j;
     float total;
-
+    int z,h,m;
+    m = 0;
     j =0;
     total =0;
     ptr = inventario;
+    string VentaUsuario, Ventacontrasena;
+
+    cout << "Estas Accediendo al apartado de ventas " << endl;
+    std::cout << "Introduce usuario y contrasena " << endl;
+    cin>>VentaUsuario;
+    cin>>Ventacontrasena;
+    for(z=0; z<TotalUsuarios; z++){
+        if(VentaUsuario==usuarios[z]){
+            if(Ventacontrasena==contrasenas[z]){
+                UsuarioVenta[z] = VentaUsuario;
+                std::cout << "Bienvenido Usuario   "<<UsuarioVenta[z] << '\n';
+            }
+        }
+
+    }
 
 
     informacion_ticket_info ticket_info[100];
@@ -737,7 +785,10 @@ void Ventas(){
 	    }while( producto_compra != "*" );
 
 					total_ventas += total;
-
+cout<<setw(40)<<"Abarrotes el Mosri\n \n \n"<<endl;
+    int v=0;
+    std::cout << "Vendedor: "<<UsuarioVenta[h]<< '\n';h++;
+    v--;
 
 				    cout << setw(20) <<  "Informacion de la Venta realizada "<< endl;
 				    cout << "Cantidad: " << setw(10)<< "Producto: " << setw(10) << " Precio: " << setw(10)  << " Total: "<< endl;
@@ -752,6 +803,129 @@ void Ventas(){
 				    cout << setw(30) <<"Total vendido es: " << total << endl;
 
 				    j=0;
+
+
+}
+
+void modificaciones(){
+
+    string producto_a_modificar;
+    int product_modif;
+    int modificacion_De_producto; 
+    char resp;
+
+
+    do {
+        cout << "Seleccione la opcion que desea modificar de su producto: \n 1. ID \n 2. Existencias \n 3. Precio de compra \n 4. Precio de venta \n 5. Nivel de Reorden \n 6.Todas \n 0.Salir \n";
+        cin >> product_modif;
+
+        if (product_modif != 0){
+            cout << "Dame el producto: ";
+            cin >> producto_a_modificar;
+            
+
+            modificacion_De_producto = buscar(producto_a_modificar);
+             ptr -> producto = producto_a_modificar;
+
+            if  (inventario = ptr){
+
+                switch (product_modif) {
+                    case 1: cout<<"Dame el nuevo ID";
+                  cin>> ptr ->ind;
+                    
+                    case 2:
+                        cout << "Dame el nuevo numero de existencias: ";
+                        cin >> ptr ->exi;
+
+                        while(ptr -> exi < ptr -> nvlr){
+                            cout << "NR mayor que existencias capture de nuevo" << endl;
+                            cout << "Existencias: ";
+                            cin >> ptr -> exi;
+                        }
+
+                        cout << "Producto modificado " << endl;
+                        break;
+                    case 3:
+                        cout << "Dame el nuevo precio de compra: ";
+                        cin >> ptr ->pc;
+
+                        while (ptr -> pc > ptr -> pv) {
+                            cout << "PC mayor que PV " << endl;
+                            cout << "PC: ";
+                            cin >> ptr -> pc;
+                        }
+
+                        cout << "Producto modificado " << endl;
+                        break;
+                    case 4:
+                        cout << "Dame el nuevo precio de venta: ";
+                        cin >> ptr -> pv;
+
+                        while (ptr -> pv < ptr -> pc) {
+                            cout << "PV menor que PC" << endl;
+                            cout << "PV: ";
+                            cin >> ptr -> pv;
+                        }
+
+                        cout << "Producto modificado " << endl;
+                        break;
+                    case 5:
+                        cout << "Dame el nuevo nivel de reorden: ";
+                        cin >> ptr -> nvlr;
+
+                        while (ptr -> exi < ptr -> nvlr) {
+                            cout << "NR mayor que existencias capture de nuevo" << endl;
+                            cout << "NR: ";
+                            cin >> ptr -> nvlr;
+                        }
+
+                        cout << "Producto modificado " << endl;
+                        break;
+
+                    case 6:
+                        
+
+                        ptr -> producto = producto_a_modificar;
+
+                        cout << "Existencias: ";
+                        cin >> ptr ->exi;
+
+                        cout << "PC: ";
+                        cin >>ptr -> pc;
+
+                        cout << "PV: ";
+                        cin >> ptr -> pv;
+                        while (ptr -> pv < ptr -> pc) {
+                            cout << "PV menor que PC vuelva a capturar";
+                            cout << "PV: ";
+                            cin >> ptr -> pv;
+
+                        }
+
+                        cout << "NR: ";
+                        cin >> ptr -> nvlr;
+                        while (ptr ->exi < ptr -> nvlr) {
+                            cout << "NR mayor  que existencias vuelva a capturar";
+                            cout << "NR: ";
+                            cin >> ptr -> nvlr;
+
+                        }
+
+                        cout << "Producto modificado " << endl;
+                        break;
+
+                    default:
+                        cout << "Error" << endl;
+                        break;
+
+                }
+            } else
+                cout << "El producto no existe" << endl;
+
+        }
+
+
+    }while(product_modif!= 0);
 
 
 }
